@@ -12,6 +12,8 @@ import {
   View
 } from 'react-native';
 
+import TabNavigator from 'react-native-tab-navigator';
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -23,15 +25,26 @@ export default class App extends Component<{}> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+        <TabNavigator>
+          <TabNavigator.Item
+            selected={this.state.selectedTab === 'home'}
+            title="Home"
+            renderIcon={() => <Image source={require('./res/images/ic_polular.png')} />}
+            renderSelectedIcon={() => <Image source={require('./res/images/ic_polular.png')} />}
+            badgeText="1"
+            onPress={() => this.setState({ selectedTab: 'home' })}>
+            {homeView}
+          </TabNavigator.Item>
+          <TabNavigator.Item
+            selected={this.state.selectedTab === 'profile'}
+            title="Profile"
+            renderIcon={() => <Image source={require('./res/images/ic_trending.png')} />}
+            renderSelectedIcon={() => <Image source={require('./res/images/ic_trending.png')} />}
+            renderBadge={() => <CustomBadgeView />}
+            onPress={() => this.setState({ selectedTab: 'profile' })}>
+            {profileView}
+          </TabNavigator.Item>
+        </TabNavigator>
       </View>
     );
   }
