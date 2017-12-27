@@ -19,7 +19,11 @@ export default class Boy extends Component {
         return (
             <View style={styles.container}>
                 <NavigationBar
-                title={'boy'}/>
+                    title={'boy'}
+                    statusBar={{
+                        backgroundColor: '#000000'
+                    }}
+                    style={styles.navigationBar}/>
                 <Text style={styles.text}>I am boy.</Text>
                 <Text style={styles.text}
                       onPress={() => {
@@ -42,9 +46,12 @@ export default class Boy extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'gray',
+        backgroundColor: 'white',
     },
     text: {
         fontSize: 20,
+    },
+    navigationBar: {
+        backgroundColor: '#000000'
     }
 });

@@ -4,11 +4,10 @@
 import React, {Component} from 'react';
 import {
     View,
-    StatusBar,
-    StyleSheet,
     Text,
-    Image,
-    Platform
+    Platform,
+    StatusBar,
+    StyleSheet
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -17,8 +16,9 @@ const NAV_BAR_HEIGHT_IOS = 44;
 const STATUS_BAR_HEIGHT = 20;
 const StatusBarShape = {
     backgroundColor: PropTypes.string,
-    barStyle: PropTypes.oneOf('default', 'light-content', 'dark-content'),
-}
+    barStyle: PropTypes.oneOf(['default', 'light-content', 'dark-content']),
+    hidden: PropTypes.bool
+};
 
 export default class NavigationBar extends Component {
     static propTypes = {
@@ -28,7 +28,13 @@ export default class NavigationBar extends Component {
         hide: PropTypes.bool,
         leftButton: PropTypes.element,
         rightButton: PropTypes.element,
-        statusBar: PropTypes.shape()
+        statusBar: PropTypes.shape(StatusBarShape)
+    };
+    static defaultProps = {
+        statusBar: {
+            barStyle: 'light-content',
+            hidden: false
+        }
     };
 
     constructor(props) {
@@ -40,9 +46,8 @@ export default class NavigationBar extends Component {
     }
 
     render() {
-        let status = <View style={styles.statusBar}><StatusBar/></View>
-        let titleView = this.props.titleView ? this.props.titleView :
-            <Text style={styles.title}>{this.props.title}</Text>;
+        let status = <View style={[styles.statusBar]}><StatusBar {...this.props.statusBar}/></View>;
+        let titleView = this.props.titleView ? this.props.titleView : <Text style={styles.title}>{this.props.title}</Text>;
         let content = <View style={styles.navBar}>
             {this.props.leftButton}
             <View style={styles.titleViewContainer}>
@@ -51,7 +56,8 @@ export default class NavigationBar extends Component {
             {this.props.rightButton}
         </View>;
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, this.props.style]}>
+                {status}
                 {content}
             </View>
         )
@@ -66,7 +72,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: Platform.OS === 'ios' ? NAV_BAR_HEIGHT_IOS : NAVBAR_HEIGHT_ANDROID,
-        backgroundColor: 'red',
         flexDirection: 'row'
     },
     titleViewContainer: {
