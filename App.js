@@ -10,6 +10,7 @@ import TabNavigator from 'react-native-tab-navigator';
 import {Navigator} from 'react-native-deprecated-custom-components'
 import Boy from './Boy';
 import ListViewText from './ListViewTest';
+import FetchTest from './FetchTest';
 
 
 export default class App extends Component {
@@ -68,8 +69,9 @@ export default class App extends Component {
                     renderScene={(route, navigator) => {
                         let Component = route.component;
                         return <Component navigator={navigator} {...route.params}/>
-                    }}/>*/}
-                <ListViewText/>
+                    }}/>
+                <ListViewText/>*/}
+                <FetchTest/>
             </View>
         );
     }

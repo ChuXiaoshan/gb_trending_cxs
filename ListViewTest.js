@@ -29,7 +29,7 @@ var data = {
             "email": "xxxvxcvcxcxvxxx.gmail.com",
             "fullName": "CxS"
         }
-    ]
+    ],
 };
 
 export default class ListViewTest extends Component {
