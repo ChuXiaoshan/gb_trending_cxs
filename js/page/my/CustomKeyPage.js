@@ -79,11 +79,15 @@ export default class CustomKeyPage extends Component {
     renderCheckBox(data) {
         let leftText = data.name;
         return (
-            <CheckBox style={{flex: 1}}
+            <CheckBox style={{flex: 1, padding: 10}}
                       onClick={() => this.onClick(data)}
                       leftText={leftText}
-                      checkedImage={<Image source={require('./img/ic_check_box.png')}/>}
-                      unCheckedImage={<Image source={require('./img/ic_check_box_outline_blank.png')}/>}
+                      checkedImage={<Image
+                          style={{tintColor: '#6495ED'}}
+                          source={require('./img/ic_check_box.png')}/>}
+                      unCheckedImage={<Image
+                          style={{tintColor: '#6495ED'}}
+                          source={require('./img/ic_check_box_outline_blank.png')}/>}
             />)
     }
 
@@ -125,8 +129,9 @@ const
             fontSize: 20,
         },
         line: {
-            height: 1,
-            backgroundColor: 'black'
+            height: 0.3,
+            backgroundColor: 'darkgray',
+
         },
         item: {
             flexDirection: 'row',
