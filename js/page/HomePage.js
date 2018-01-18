@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
 import PopularPage from './PopularPage'
+import AsyncStorageTest from '../../AsyncStorageTest';
+import MyPage from './my/MyPage';
 
 
 export default class App extends Component {
@@ -41,7 +43,7 @@ export default class App extends Component {
                         renderIcon={() => <Image style={styles.image} source={require('../../res/images/ic_trending.png')}/>}
                         renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'red'}]} source={require('../../res/images/ic_trending.png')}/>}
                         onPress={() => this.setState({selectedTab: 'tb_trending'})}>
-                        <View style={styles.page2}></View>
+                        <AsyncStorageTest/>
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         title="收藏"
@@ -59,7 +61,7 @@ export default class App extends Component {
                         renderIcon={() => <Image style={styles.image} source={require('../../res/images/ic_my.png')}/>}
                         renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'red'}]} source={require('../../res/images/ic_my.png')}/>}
                         onPress={() => this.setState({selectedTab: 'tb_my'})}>
-                        <View style={styles.page2}></View>
+                        <MyPage {...this.props}/>
                     </TabNavigator.Item>
                 </TabNavigator>
             </View>
