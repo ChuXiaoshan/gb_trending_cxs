@@ -3,7 +3,7 @@
     "path": "stars:>1",
     "name": "ALL",
     "short_name": "ALL",
-    "checked": true
+    "checked": false
   },
   {
     "path": "IOS",
@@ -13,7 +13,7 @@
   {
     "path": "react-native",
     "name": "react-native",
-    "checked": true
+    "checked": false
   },
   {
     "path": "MySQL",
@@ -23,6 +23,26 @@
   {
     "path": "AngularJS",
     "name": "AngularJS",
+    "checked": true
+  },
+  {
+    "path": "jQuery",
+    "name": "jQuery",
+    "checked": true
+  },
+  {
+    "path": "React",
+    "name": "React",
+    "checked": true
+  },
+  {
+    "path": "Android",
+    "name": "Android",
+    "checked": true
+  },
+  {
+    "path": "Go",
+    "name": "Go",
     "checked": true
   }
 ]

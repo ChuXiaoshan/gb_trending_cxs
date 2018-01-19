@@ -12,12 +12,50 @@ import NavigationBar from "../common/NavigationBar";
 import DataRepository from '../expand/dao/DataRepository'
 import RepositoryCell from '../common/RepositoryCell'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
+import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
 
 export default class PopularPage extends Component {
+    constructor(props) {
+        super(props);
+        this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
+        this.state = {
+            languages: []
+        }
+    }
+
+    componentDidMount() {
+        this.load();
+    }
+
+    load() {
+        this.languageDao.fetch()
+            .then(r => {
+                this.setState({
+                    languages: r
+                })
+            })
+            .catch(e => {
+                console.log(e);
+            })
+    }
+
     render() {
+        let content = this.state.languages.length > 0 ?
+            <ScrollableTabView
+                tabBarBackgroundColor="#6495ED"
+                tabBarInactiveTextColor="mintcream"
+                tabBarActiveTextColor="white"
+                tabBarUnderlineStyle={{backgroundColor: '#e7e7e7', height: 2}}
+                renderTabBar={() => <ScrollableTabBar/>}>
+
+                {this.state.languages.map((r, i, arr) => {
+                    let lan = arr[i];
+                    return lan.checked ? <PopularTab key={i} tabLabel={lan.name}/> : null;
+                })}
+            </ScrollableTabView> : null;
         return (
             <View style={styles.container}>
                 <NavigationBar
@@ -26,17 +64,7 @@ export default class PopularPage extends Component {
                         backgroundColor: '#6495ED'
                     }}
                     style={{backgroundColor: '#6495ED'}}/>
-                <ScrollableTabView
-                    tabBarBackgroundColor="#6495ED"
-                    tabBarInactiveTextColor="mintcream"
-                    tabBarActiveTextColor="white"
-                    tabBarUnderlineStyle={{backgroundColor: '#e7e7e7', height: 2}}
-                    renderTabBar={() => <ScrollableTabBar/>}>
-                    <PopularTab tabLabel='JAVA'/>
-                    <PopularTab tabLabel='IOS'/>
-                    <PopularTab tabLabel='ANDROID'/>
-                    <PopularTab tabLabel='JAVASCRIPT'/>
-                </ScrollableTabView>
+                {content}
             </View>
         )
     }

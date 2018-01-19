@@ -25,7 +25,7 @@ export default class RepositoryCell extends Component {
                             source={{uri: this.props.data.owner.avatar_url}}/>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text>Starts:</Text>
+                        <Text>Stars:</Text>
                         <Text>{this.props.data.stargazers_count}</Text>
                     </View>
                     <Image style={{width: 22, height: 22}} source={require('../../res/images/ic_star.png')}/>
