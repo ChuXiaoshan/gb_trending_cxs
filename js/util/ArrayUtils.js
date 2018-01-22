@@ -52,4 +52,18 @@ export default class ViewUtils {
         }
         return true;
     }
+
+    /**
+     * 将数组中指定元素移除
+     * @param arr
+     * @param items
+     */
+    static remove(arr, items) {
+        if (!arr) {
+            return;
+        }
+        for (let i = 0, l = arr.length; i < l; i++) {
+            if (items === arr[i]) arr.splice(i, 1);
+        }
+    }
 }

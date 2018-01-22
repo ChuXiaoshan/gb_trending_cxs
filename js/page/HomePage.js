@@ -3,17 +3,17 @@
  */
 import React, {Component} from 'react';
 import {
-    StyleSheet,
-    Image,
-    Text,
     View,
-    ListView
+    Image,
+    StyleSheet,
+    DeviceEventEmitter
 } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
 import PopularPage from './PopularPage'
 import AsyncStorageTest from '../../AsyncStorageTest';
 import MyPage from './my/MyPage';
-
+import Toast, {DURATION} from 'react-native-easy-toast';
+import WebViewTest from '../../WebViewTest'
 
 export default class App extends Component {
     constructor(props) {
@@ -21,6 +21,16 @@ export default class App extends Component {
         this.state = {
             selectedTab: 'tb_popular',
         }
+    }
+
+    componentDidMount() {
+        this.listener = DeviceEventEmitter.addListener("showToast", (text) => {
+            this.toast.show(text, DURATION.LENGTH_SHORT);
+        })
+    }
+
+    componentWillUnmount() {
+        this.listener && this.listener.remove();
     }
 
     render() {
@@ -34,7 +44,7 @@ export default class App extends Component {
                         renderIcon={() => <Image style={styles.image} source={require('../../res/images/ic_polular.png')}/>}
                         renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'red'}]} source={require('../../res/images/ic_polular.png')}/>}
                         onPress={() => this.setState({selectedTab: 'tb_popular'})}>
-                        <PopularPage/>
+                        <PopularPage {...this.props}/>
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         title="趋势"
@@ -52,7 +62,8 @@ export default class App extends Component {
                         renderIcon={() => <Image style={styles.image} source={require('../../res/images/ic_favorite.png')}/>}
                         renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'red'}]} source={require('../../res/images/ic_favorite.png')}/>}
                         onPress={() => this.setState({selectedTab: 'tb_favorite'})}>
-                        <View style={styles.page1}></View>
+                        <WebViewTest/>
+                        {/*<AsyncStorageTest/>*/}
                     </TabNavigator.Item>
                     <TabNavigator.Item
                         title="我的"
@@ -64,6 +75,7 @@ export default class App extends Component {
                         <MyPage {...this.props}/>
                     </TabNavigator.Item>
                 </TabNavigator>
+                <Toast ref={toast => this.toast = toast}/>
             </View>
         );
     }

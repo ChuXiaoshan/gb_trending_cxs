@@ -6,13 +6,15 @@ import {
     View,
     ListView,
     StyleSheet,
-    RefreshControl
+    RefreshControl,
+    DeviceEventEmitter
 } from 'react-native';
 import NavigationBar from "../common/NavigationBar";
 import DataRepository from '../expand/dao/DataRepository'
 import RepositoryCell from '../common/RepositoryCell'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
+import RepositoryDetail from './RepositoryDetail'
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
@@ -53,7 +55,7 @@ export default class PopularPage extends Component {
 
                 {this.state.languages.map((r, i, arr) => {
                     let lan = arr[i];
-                    return lan.checked ? <PopularTab key={i} tabLabel={lan.name}/> : null;
+                    return lan.checked ? <PopularTab key={i} tabLabel={lan.name} {...this.props}/> : null;
                 })}
             </ScrollableTabView> : null;
         return (
@@ -90,12 +92,26 @@ class PopularTab extends Component {
             isLoading: true
         });
         let url = this.getUrl(this.props.tabLabel);
-        this.dataRepository.fetchNetRepository(url)
+        this.dataRepository.fetchRepository(url)
             .then(result => {
+                let items = result && result.items ? result.items : result ? result : [];
                 this.setState({
-                    dataSource: this.state.dataSource.cloneWithRows(result.items),
+                    dataSource: this.state.dataSource.cloneWithRows(items),
                     isLoading: false,
-                })
+                });
+                if (result && result.update_data && !this.dataRepository.checkData(result.update_data)) {
+                    DeviceEventEmitter.emit("showToast", "数据过时");
+                    return this.dataRepository.fetchNetRepository(url);
+                } else {
+                    DeviceEventEmitter.emit("showToast", "显示缓存数据");
+                }
+            })
+            .then(items => {
+                if (!items || items.length === 0) return;
+                this.setState({
+                    dataSource: this.state.dataSource.cloneWithRows(items),
+                });
+                DeviceEventEmitter.emit("showToast", "显示网络数据");
             })
             .catch(error => {
                 this.setState({
@@ -109,7 +125,15 @@ class PopularTab extends Component {
     }
 
     renderRow(data) {
-        return <RepositoryCell data={data}/>
+        return <RepositoryCell
+            onSelect={() => {
+                this.props.navigator.push({
+                    component: RepositoryDetail,
+                    params: {data: data, ...this.props}
+                })
+            }}
+            key={data.id}
+            data={data}/>
     }
 
     render() {
@@ -129,7 +153,6 @@ class PopularTab extends Component {
             />
         </View>
     }
-
 }
 
 const styles = StyleSheet.create({
