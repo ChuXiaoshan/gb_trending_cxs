@@ -10,11 +10,13 @@ import {
 import NavigationBar from '../common/NavigationBar';
 import ViewUtils from '../util/ViewUtils';
 
+const TRENDING_URL = 'https://github.com/';
+
 export default class RepositoryDetail extends Component {
     constructor(props) {
         super(props);
-        this.url = this.props.data.html_url;
-        let title = this.props.data.full_name;
+        this.url = this.props.data.html_url ? this.props.data.html_url : TRENDING_URL + this.props.data.fullName;
+        let title = this.props.data.full_name ? this.props.data.full_name : this.props.data.fullName;
         this.state = {
             url: this.url,
             title: title,

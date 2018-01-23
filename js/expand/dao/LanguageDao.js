@@ -1,11 +1,12 @@
 /**
  * Created by CxS on 2018/1/18 16:36
  */
-import React, {Component} from 'react';
+import React from 'react';
 import {
     AsyncStorage
 } from 'react-native';
-import keys from '../../../res/data/keys.json'
+import keysData from '../../../res/data/keys.json'
+import langsData from '../../../res/data/langs.json'
 
 export var FLAG_LANGUAGE = {flag_language: 'flag_language_language', flag_key: 'flag_language_key'};
 
@@ -27,7 +28,7 @@ export default class LanguageDao {
                             reject(e);
                         }
                     } else {
-                        const data = this.flag === FLAG_LANGUAGE.flag_key ? keys : null;
+                        const data = this.flag === FLAG_LANGUAGE.flag_key ? keysData : langsData;
                         this.save(data);
                         resolve(data);
                     }
