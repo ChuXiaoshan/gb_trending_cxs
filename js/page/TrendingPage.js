@@ -2,30 +2,14 @@
  * Created by CxS on 2017/12/28 15:34
  */
 import React, {Component} from 'react';
-import {
-    Text,
-    View,
-    Image,
-    ListView,
-    StyleSheet,
-    Alert,
-    RefreshControl,
-    DeviceEventEmitter
-} from 'react-native';
-import {
-    Menu,
-    MenuProvider,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-    renderers
-} from 'react-native-popup-menu';
-import NavigationBar from "../common/NavigationBar";
-import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
-import TrendingCell from '../common/TrendingCell'
-import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
+import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger, renderers} from 'react-native-popup-menu';
+import {DeviceEventEmitter, Image, ListView, RefreshControl, StyleSheet, Text, View} from 'react-native';
+import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view';
+import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository';
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
+import NavigationBar from "../common/NavigationBar";
 import RepositoryDetail from './RepositoryDetail';
+import TrendingCell from '../common/TrendingCell';
 import TimeSpan from '../model/TimeSpan';
 
 const {Popover} = renderers;
@@ -60,20 +44,24 @@ export default class TrendingPage extends Component {
     }
 
     renderTitleView() {
-        return <Menu onSelect={(value) => {
-            Alert.alert("value：", value.valueOf());
-            this.setState({timeName: timeSpans[value.valueOf()].showText})
-        }} renderer={Popover} rendererProps={{preferredPlacement: 'bottom'}}
-        >
+        return <Menu
+            onSelect={(value) => {
+                this.setState({
+                    timeName: value.showText,
+                    timeSpan: value.searchText
+                })
+            }}
+            renderer={Popover}
+            rendererProps={{preferredPlacement: 'bottom'}}>
             <MenuTrigger>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 18, color: 'white', fontWeight: '400'}}>趋势{this.state.timeName}</Text>
+                    <Text style={{fontSize: 18, color: 'white', fontWeight: '400'}}>趋势 {this.state.timeName}</Text>
                     <Image style={{width: 12, height: 12, marginLeft: 5}} source={require('../../res/images/ic_spinner_triangle.png')}/>
                 </View>
             </MenuTrigger>
             <MenuOptions>
                 {timeSpans.map((r, i, arr) => {
-                    return <MenuOption key={i} style={styles.menuOption} value={i} text={arr[i].showText}/>;
+                    return <MenuOption key={i} style={styles.menuOption} value={arr[i]} text={arr[i].showText}/>;
                 })}
             </MenuOptions>
         </Menu>
@@ -123,15 +111,35 @@ class TrendingTab extends Component {
         this.onLoad(this.props.timeSpan, true)
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.timeSpan !== this.props.timeSpan) {
+            this.onLoad(nextProps.timeSpan)
+        }
+    }
+
+    updateState(dic) {
+        if (!this) return;
+        this.setState(dic)
+    }
+
+    onRefresh() {
+        this.onLoad(this.props.timeSpan)
+    }
+
+    getUrl(category, timeSpan) {
+        return API_URL + category + '?' + timeSpan;
+    }
+
     onLoad(timeSpan, isRefresh) {
-        this.setState({
+        this.updateState({
             isLoading: true
         });
-        let url = this.getUrl(this.state.text, timeSpan);
+        let url = this.getUrl(this.props.tabLabel, timeSpan);
+        console.log(url);
         this.dataRepository.fetchRepository(url)
             .then(result => {
                 let items = result && result.items ? result.items : result ? result : [];
-                this.setState({
+                this.updateState({
                     dataSource: this.state.dataSource.cloneWithRows(items),
                     isLoading: false,
                 });
@@ -144,20 +152,16 @@ class TrendingTab extends Component {
             })
             .then(items => {
                 if (!items || items.length === 0) return;
-                this.setState({
+                this.updateState({
                     dataSource: this.state.dataSource.cloneWithRows(items),
                 });
                 DeviceEventEmitter.emit("showToast", "显示网络数据");
             })
             .catch(error => {
-                this.setState({
+                this.updateState({
                     result: JSON.stringify(error)
                 })
             })
-    }
-
-    getUrl(category, timeSpan) {
-        return API_URL + category + timeSpan;
     }
 
     renderRow(data) {
@@ -180,11 +184,11 @@ class TrendingTab extends Component {
                 refreshControl={
                     <RefreshControl
                         refreshing={this.state.isLoading}
-                        onRefresh={() => this.onLoad()}
-                        colors={["#2196F3", 'red', 'green']}
-                        tintColor={'#2196F3'}
+                        onRefresh={() => this.onRefresh()}
+                        colors={["#6495ED", 'red', 'green']}
+                        tintColor={'#6495ED'}
                         title={'Loading...'}
-                        titleColor={"#2196F3"}
+                        titleColor={"#6495ED"}
                     />}
             />
         </View>

@@ -14,7 +14,6 @@ import {
 export default class RepositoryCell extends Component {
     constructor(props) {
         super(props);
-        console.log("repositoryCell------->" + this.props.data.full_name)
     }
 
     render() {

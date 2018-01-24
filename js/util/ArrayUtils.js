@@ -14,7 +14,7 @@ export default class ViewUtils {
      * @param item
      */
     static updateArray(array, item) {
-        for (var i = 0, len = array.length; i < len; i++) {
+        for (let i = 0, len = array.length; i < len; i++) {
             const temp = array[i];
             if (temp === item) {
                 array.splice(i, 1);
