@@ -8,24 +8,37 @@ import {
     Image,
     ListView,
     StyleSheet,
+    Alert,
     RefreshControl,
-    TouchableOpacity,
     DeviceEventEmitter
 } from 'react-native';
+import {
+    Menu,
+    MenuProvider,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+    renderers
+} from 'react-native-popup-menu';
 import NavigationBar from "../common/NavigationBar";
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import TrendingCell from '../common/TrendingCell'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 import RepositoryDetail from './RepositoryDetail';
+import TimeSpan from '../model/TimeSpan';
 
+const {Popover} = renderers;
 const API_URL = 'https://github.com/trending/';
+const timeSpans = [new TimeSpan('since=daily', '今 天'), new TimeSpan('since=weekly', '本 周'), new TimeSpan('since=monthly', '本 月')];
 
 export default class TrendingPage extends Component {
     constructor(props) {
         super(props);
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_language);
         this.state = {
+            timeSpan: 'since=today',
+            timeName: '今天',
             languages: []
         }
     }
@@ -47,18 +60,33 @@ export default class TrendingPage extends Component {
     }
 
     renderTitleView() {
-        return <View>
-            <TouchableOpacity>
+        return <Menu onSelect={(value) => {
+            Alert.alert("value：", value.valueOf());
+            this.setState({timeName: timeSpans[value.valueOf()].showText})
+        }} renderer={Popover} rendererProps={{preferredPlacement: 'bottom'}}
+        >
+            <MenuTrigger>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 18, color: 'white', fontWeight: '400'}}>趋势</Text>
-                    <Image style={{width: 12, height: 12, marginLeft: 5}}
-                           source={require('../../res/images/ic_spinner_triangle.png')}/>
+                    <Text style={{fontSize: 18, color: 'white', fontWeight: '400'}}>趋势{this.state.timeName}</Text>
+                    <Image style={{width: 12, height: 12, marginLeft: 5}} source={require('../../res/images/ic_spinner_triangle.png')}/>
                 </View>
-            </TouchableOpacity>
-        </View>
+            </MenuTrigger>
+            <MenuOptions>
+                {timeSpans.map((r, i, arr) => {
+                    return <MenuOption key={i} style={styles.menuOption} value={i} text={arr[i].showText}/>;
+                })}
+            </MenuOptions>
+        </Menu>
     }
 
     render() {
+        let navigationBar = <NavigationBar
+            title='趋势'
+            titleView={this.renderTitleView()}
+            statusBar={{
+                backgroundColor: '#6495ED'
+            }}
+            style={{backgroundColor: '#6495ED'}}/>;
         let content = this.state.languages.length > 0 ?
             <ScrollableTabView
                 tabBarBackgroundColor="#6495ED"
@@ -66,23 +94,16 @@ export default class TrendingPage extends Component {
                 tabBarActiveTextColor="white"
                 tabBarUnderlineStyle={{backgroundColor: '#e7e7e7', height: 2}}
                 renderTabBar={() => <ScrollableTabBar/>}>
-
                 {this.state.languages.map((r, i, arr) => {
                     let lan = arr[i];
-                    return lan.checked ? <TrendingTab key={i} tabLabel={lan.name} {...this.props}/> : null;
+                    return lan.checked ? <TrendingTab key={i} tabLabel={lan.name} timeSpan={this.state.timeSpan} {...this.props}/> : null;
                 })}
             </ScrollableTabView> : null;
         return (
-            <View style={styles.container}>
-                <NavigationBar
-                    title='趋势'
-                    titleView={this.renderTitleView()}
-                    statusBar={{
-                        backgroundColor: '#6495ED'
-                    }}
-                    style={{backgroundColor: '#6495ED'}}/>
+            <MenuProvider style={styles.container}>
+                {navigationBar}
                 {content}
-            </View>
+            </MenuProvider>
         )
     }
 }
@@ -99,14 +120,14 @@ class TrendingTab extends Component {
     }
 
     componentDidMount() {
-        this.onLoad()
+        this.onLoad(this.props.timeSpan, true)
     }
 
-    onLoad() {
+    onLoad(timeSpan, isRefresh) {
         this.setState({
             isLoading: true
         });
-        let url = this.getUrl('?since=daily', this.state.text);
+        let url = this.getUrl(this.state.text, timeSpan);
         this.dataRepository.fetchRepository(url)
             .then(result => {
                 let items = result && result.items ? result.items : result ? result : [];
@@ -135,7 +156,7 @@ class TrendingTab extends Component {
             })
     }
 
-    getUrl(timeSpan, category) {
+    getUrl(category, timeSpan) {
         return API_URL + category + timeSpan;
     }
 
@@ -176,5 +197,16 @@ const styles = StyleSheet.create({
     },
     tips: {
         fontSize: 20
+    },
+    trigger: {
+        fontSize: 18,
+        color: 'white',
+        fontWeight: '400'
+    },
+    menuOption: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 8,
+        paddingBottom: 8,
     }
 });
