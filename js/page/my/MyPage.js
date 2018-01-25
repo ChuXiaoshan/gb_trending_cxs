@@ -50,16 +50,29 @@ export default class MyPage extends Component {
                   onPress={() => {
                       this.props.navigator.push({
                           component: SortKeyPage,
-                          params: {...this.props}
+                          params: {
+                              ...this.props,
+                              flag: FLAG_LANGUAGE.flag_language
+                          }
                       })
                   }}>标签排序</Text>
+            <Text style={styles.tips}
+                  onPress={() => {
+                      this.props.navigator.push({
+                          component: SortKeyPage,
+                          params: {
+                              ...this.props,
+                              flag: FLAG_LANGUAGE.flag_language
+                          }
+                      })
+                  }}>语言排序</Text>
             <Text style={styles.tips}
                   onPress={() => {
                       this.props.navigator.push({
                           component: CustomKeyPage,
                           params: {
                               ...this.props,
-                              isRemoveKey: true
+                              isRemoveKey: true,
                           }
                       })
                   }}>标签移除</Text>
