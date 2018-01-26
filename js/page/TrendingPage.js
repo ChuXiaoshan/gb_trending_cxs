@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger, renderers} from 'react-native-popup-menu';
-import {DeviceEventEmitter, Image, ListView, RefreshControl, StyleSheet, Text, View} from 'react-native';
+import {Image, ListView, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view';
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository';
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
@@ -11,9 +11,14 @@ import NavigationBar from "../common/NavigationBar";
 import RepositoryDetail from './RepositoryDetail';
 import TrendingCell from '../common/TrendingCell';
 import TimeSpan from '../model/TimeSpan';
+import ProjectsModel from '../model/ProjectModel';
+import FavoriteDao from '../expand/dao/FavoriteDao';
+import Utils from "../util/Utils";
 
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
 const {Popover} = renderers;
 const API_URL = 'https://github.com/trending/';
+const dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
 const timeSpans = [new TimeSpan('since=daily', '今 天'), new TimeSpan('since=weekly', '本 周'), new TimeSpan('since=monthly', '本 月')];
 
 export default class TrendingPage extends Component {
@@ -99,11 +104,10 @@ export default class TrendingPage extends Component {
 class TrendingTab extends Component {
     constructor(props) {
         super(props);
-        this.dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
         this.state = {
-            result: '',
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             isLoading: false,
+            favoriteKeys: []
         }
     }
 
@@ -117,13 +121,45 @@ class TrendingTab extends Component {
         }
     }
 
+    /**
+     * 更新Project item Favorite状态。
+     */
+    flushFavoriteState() {
+        let projectModels = [];
+        let items = this.items;
+        for (let i = 0, len = items.length; i < len; i++) {
+            projectModels.push(new ProjectsModel(items[i], Utils.checkFavorite(items[i], this.state.favoriteKeys)));
+        }
+        this.updateState({
+            isLoading: false,
+            dataSource: this.getDataSource(projectModels)
+        })
+    }
+
+    getFavoriteKeys() {
+        favoriteDao.getFavoriteKeys()
+            .then(keys => {
+                if (keys) {
+                    this.updateState({favoriteKeys: keys})
+                }
+                this.flushFavoriteState()
+            })
+            .catch(e => {
+                this.flushFavoriteState()
+            })
+    }
+
+    getDataSource(items) {
+        return this.state.dataSource.cloneWithRows(items);
+    }
+
     updateState(dic) {
         if (!this) return;
         this.setState(dic)
     }
 
     onRefresh() {
-        this.onLoad(this.props.timeSpan)
+        this.onLoad(this.props.timeSpan, true)
     }
 
     getUrl(category, timeSpan) {
@@ -136,44 +172,50 @@ class TrendingTab extends Component {
         });
         let url = this.getUrl(this.props.tabLabel, timeSpan);
         console.log(url);
-        this.dataRepository.fetchRepository(url)
+        dataRepository.fetchRepository(url)
             .then(result => {
-                let items = result && result.items ? result.items : result ? result : [];
-                this.updateState({
-                    dataSource: this.state.dataSource.cloneWithRows(items),
-                    isLoading: false,
-                });
-                if (result && result.update_data && !this.dataRepository.checkData(result.update_data)) {
-                    DeviceEventEmitter.emit("showToast", "数据过时");
-                    return this.dataRepository.fetchNetRepository(url);
-                } else {
-                    DeviceEventEmitter.emit("showToast", "显示缓存数据");
-                }
+                this.items = result && result.items ? result.items : result ? result : [];
+                this.getFavoriteKeys();
+                if (!this.items || isRefresh && result && result.update_data && !dataRepository.checkData(result.update_data))
+                    return dataRepository.fetchNetRepository(url);
             })
             .then(items => {
                 if (!items || items.length === 0) return;
-                this.updateState({
-                    dataSource: this.state.dataSource.cloneWithRows(items),
-                });
-                DeviceEventEmitter.emit("showToast", "显示网络数据");
+                this.items = items;
+                this.getFavoriteKeys()
             })
-            .catch(error => {
+            .catch(e => {
+                console.log(e);
                 this.updateState({
-                    result: JSON.stringify(error)
+                    isLoading: false
                 })
             })
     }
 
-    renderRow(data) {
+    /**
+     * favoriteIcon 的单击回调函数
+     * @param item
+     * @param isFavorite
+     */
+    onFavorite(item, isFavorite) {
+        if (isFavorite) {
+            favoriteDao.saveFavoriteItem(item.fullName, JSON.stringify(item))
+        } else {
+            favoriteDao.removeFavoriteItem(item.fullName)
+        }
+    }
+
+    renderRow(projectModel) {
         return <TrendingCell
             onSelect={() => {
                 this.props.navigator.push({
                     component: RepositoryDetail,
-                    params: {data: data, ...this.props}
+                    params: {projectModel: projectModel, ...this.props}
                 })
             }}
-            key={data.id}
-            data={data}/>
+            key={projectModel.item.fullName}
+            projectModel={projectModel}
+            onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>
     }
 
     render() {

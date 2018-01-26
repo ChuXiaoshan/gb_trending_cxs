@@ -30,7 +30,7 @@ export default class FavoriteDao {
      * @param key
      */
     removeFavoriteItem(key) {
-        AsyncStorage.setItem(key, (e) => {
+        AsyncStorage.removeItem(key, (e) => {
             if (!e) {
                 this.updateFavoriteKeys(key, false);
             }

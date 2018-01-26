@@ -99,7 +99,7 @@ class PopularTab extends Component {
         let projectModels = [];
         let items = this.items;
         for (let i = 0, len = items.length; i < len; i++) {
-            projectModels.push(new ProjectsModel(items[i], Utils.checkFavorite(items[i], this.getFavoriteKeys())));
+            projectModels.push(new ProjectsModel(items[i], Utils.checkFavorite(items[i], this.state.favoriteKeys)));
         }
         this.updateState({
             isLoading: false,
@@ -120,13 +120,13 @@ class PopularTab extends Component {
         this.dataRepository.fetchRepository(url)
             .then(result => {
                 this.items = result && result.items ? result.items : result ? result : [];
-                this.getFavroiteKeys();
+                this.getFavoriteKeys();
                 if (result && result.update_data && !this.dataRepository.checkData(result.update_data)) return this.dataRepository.fetchNetRepository(url);
             })
             .then(items => {
                 if (!items || items.length === 0) return;
                 this.items = items;
-                this.getFavroiteKeys();
+                this.getFavoriteKeys();
             })
             .catch(error => {
                 console.log(error);
