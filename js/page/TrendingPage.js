@@ -43,8 +43,8 @@ export default class TrendingPage extends Component {
                     languages: r
                 })
             })
-            .catch(e => {
-                console.log(e);
+            .catch(error => {
+                console.log(error);
             })
     }
 
