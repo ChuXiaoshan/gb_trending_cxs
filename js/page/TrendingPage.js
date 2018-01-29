@@ -210,7 +210,7 @@ class TrendingTab extends Component {
             onSelect={() => {
                 this.props.navigator.push({
                     component: RepositoryDetail,
-                    params: {projectModel: projectModel, ...this.props}
+                    params: {projectModel: projectModel, ...this.props, flag: FLAG_STORAGE.flag_trending}
                 })
             }}
             key={projectModel.item.fullName}

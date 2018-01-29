@@ -7,7 +7,6 @@ import {
     ListView,
     StyleSheet,
     RefreshControl,
-    DeviceEventEmitter
 } from 'react-native';
 import NavigationBar from "../common/NavigationBar";
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
@@ -176,7 +175,7 @@ class PopularTab extends Component {
             onSelect={() => {
                 this.props.navigator.push({
                     component: RepositoryDetail,
-                    params: {projectModel: projectModel, ...this.props}
+                    params: {projectModel: projectModel, ...this.props, flag: FLAG_STORAGE.flag_popular},
                 })
             }}
             key={projectModel.item.id}

@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
 import {
-    Text,
     View,
     Image,
     WebView,
-    TextInput,
     StyleSheet,
     TouchableOpacity,
-    DeviceEventEmitter,
 } from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 import FavoriteDao from '../expand/dao/FavoriteDao';
