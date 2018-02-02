@@ -16,6 +16,7 @@ import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-v
 import RepositoryDetail from './RepositoryDetail';
 import ProjectsModel from '../model/ProjectModel';
 import FavoriteDao from '../expand/dao/FavoriteDao';
+import ArrayUtils from '../util/ArrayUtils';
 
 export default class FavPage extends Component {
     constructor(props) {
@@ -51,6 +52,7 @@ class FavTab extends Component {
     constructor(props) {
         super(props);
         this.favoriteDao = new FavoriteDao(this.props.flag);
+        this.unFavoriteItems = [];
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             isLoading: false,
@@ -59,7 +61,7 @@ class FavTab extends Component {
     }
 
     componentDidMount() {
-        this.onLoad()
+        this.onLoad(true)
     }
 
     updateState(dic) {
@@ -67,10 +69,16 @@ class FavTab extends Component {
         this.setState(dic)
     }
 
-    onLoad() {
-        this.updateState({
-            isLoading: true
-        });
+    componentWillReceiveProps(nextProps) {
+        this.onLoad(false);
+    }
+
+    onLoad(isShowLoading) {
+        if (isShowLoading) {
+            this.updateState({
+                isLoading: true
+            });
+        }
         this.favoriteDao.getAllItems()
             .then(items => {
                 let resultData = [];
@@ -100,11 +108,13 @@ class FavTab extends Component {
      * @param isFavorite
      */
     onFavorite(item, isFavorite) {
+        let key = this.props.flag === FLAG_STORAGE.flag_trending ? item.fullName : item.id.toString();
         if (isFavorite) {
-            this.favoriteDao.saveFavoriteItem(item.id.toString(), JSON.stringify(item))
+            this.favoriteDao.saveFavoriteItem(key, JSON.stringify(item))
         } else {
-            this.favoriteDao.removeFavoriteItem(item.id.toString())
+            this.favoriteDao.removeFavoriteItem(key)
         }
+        ArrayUtils.updateArray(this.unFavoriteItems, item);
     }
 
     renderRow(projectModel) {
