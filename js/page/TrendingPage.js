@@ -3,7 +3,7 @@
  */
 import React, {Component} from 'react';
 import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger, renderers} from 'react-native-popup-menu';
-import {Image, ListView, RefreshControl, StyleSheet, Text, View} from 'react-native';
+import {DeviceEventEmitter, Image, ListView, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view';
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository';
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
@@ -104,6 +104,7 @@ export default class TrendingPage extends Component {
 class TrendingTab extends Component {
     constructor(props) {
         super(props);
+        this.isFavoriteChanged = false;
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             isLoading: false,
@@ -111,13 +112,25 @@ class TrendingTab extends Component {
         }
     }
 
+    componentWillUnmount() {
+        if (this.listener) {
+            this.listener.remove();
+        }
+    }
+
     componentDidMount() {
-        this.onLoad(this.props.timeSpan, true)
+        this.onLoad(this.props.timeSpan, true);
+        this.listener = DeviceEventEmitter.addListener('favoriteChanged_trending', () => {
+            this.isFavoriteChanged = true;
+        })
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.timeSpan !== this.props.timeSpan) {
             this.onLoad(nextProps.timeSpan)
+        } else if (this.isFavoriteChanged) {
+            this.isFavoriteChanged = false;
+            this.getFavoriteKeys();
         }
     }
 

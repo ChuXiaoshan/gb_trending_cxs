@@ -7,6 +7,7 @@ import {
     ListView,
     StyleSheet,
     RefreshControl,
+    DeviceEventEmitter
 } from 'react-native';
 import NavigationBar from "../common/NavigationBar";
 import {FLAG_STORAGE} from '../expand/dao/DataRepository'
@@ -115,6 +116,13 @@ class FavTab extends Component {
             this.favoriteDao.removeFavoriteItem(key)
         }
         ArrayUtils.updateArray(this.unFavoriteItems, item);
+        if (this.unFavoriteItems.length > 0) {
+            if (this.props.flag === FLAG_STORAGE.flag_popular) {
+                DeviceEventEmitter.emit("favoriteChanged_popular")
+            }else {
+                DeviceEventEmitter.emit("favoriteChanged_trending")
+            }
+        }
     }
 
     renderRow(projectModel) {

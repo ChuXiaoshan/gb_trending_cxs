@@ -80,6 +80,7 @@ class PopularTab extends Component {
     constructor(props) {
         super(props);
         this.dataRepository = new DataRepository(FLAG_STORAGE.flag_popular);
+        this.isFavoriteChanged = false;
         this.state = {
             result: '',
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
@@ -89,8 +90,23 @@ class PopularTab extends Component {
     }
 
     componentDidMount() {
-        this.onLoad()
-        // DeviceEv
+        this.onLoad();
+        this.listener = DeviceEventEmitter.addListener('favoriteChanged_popular', () => {
+            this.isFavoriteChanged = true;
+        })
+    }
+
+    componentWillUnmount() {
+        if (this.listener) {
+            this.listener.remove();
+        }
+    }
+
+    componentWillReceiveProps() {
+        if (this.isFavoriteChanged) {
+            this.isFavoriteChanged = false;
+            this.getFavoriteKeys();
+        }
     }
 
     /**
