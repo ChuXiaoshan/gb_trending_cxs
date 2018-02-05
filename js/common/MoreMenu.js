@@ -13,5 +13,7 @@ export const MORE_MENU = {
     about_author: 'About Author',
     custom_theme: 'Custom Theme',
     about: 'About',
+    website: 'website',
+    feedback: 'feedback',
 };
 
