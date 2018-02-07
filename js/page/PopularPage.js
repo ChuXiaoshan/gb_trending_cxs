@@ -19,8 +19,8 @@ import ProjectsModel from '../model/ProjectModel';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import Utils from '../util/Utils';
 
-const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
+const URL = 'https://api.github.com/search/repositories?q=';
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 
 export default class PopularPage extends Component {

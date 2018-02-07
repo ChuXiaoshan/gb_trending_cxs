@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import GitHubTrending from 'GitHubTrending';
 
-export var FLAG_STORAGE = {flag_popular: 'popular', flag_trending: 'trending'};
+export var FLAG_STORAGE = {flag_popular: 'popular', flag_trending: 'trending', flag_my: 'my'};
 
 export default class DataRepository {
     constructor(flag) {
@@ -95,19 +95,5 @@ export default class DataRepository {
         if (!url || !items) return;
         let wrapData = {items: items, update_data: new Date().getTime()};
         AsyncStorage.setItem(url, JSON.stringify(wrapData), callBack)
-    }
-
-    /**
-     * 判断数据是否过时
-     * @param longTime 数据的时间戳
-     * @returns {boolean} 是否过时
-     */
-    checkData(longTime) {
-        let cDate = new Date();
-        let tDate = new Date();
-        tDate.setTime(longTime);
-        if (cDate.getMonth() !== tDate.getMonth()) return false;
-        if (cDate.getDay() !== tDate.getDay()) return false;
-        return cDate.getHours() - tDate.getHours() <= 4;
     }
 }

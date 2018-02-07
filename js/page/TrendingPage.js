@@ -8,18 +8,18 @@ import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-v
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository';
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 import NavigationBar from "../common/NavigationBar";
+import FavoriteDao from '../expand/dao/FavoriteDao';
 import RepositoryDetail from './RepositoryDetail';
 import TrendingCell from '../common/TrendingCell';
-import TimeSpan from '../model/TimeSpan';
 import ProjectsModel from '../model/ProjectModel';
-import FavoriteDao from '../expand/dao/FavoriteDao';
+import TimeSpan from '../model/TimeSpan';
 import Utils from "../util/Utils";
 
-const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
-const {Popover} = renderers;
-const API_URL = 'https://github.com/trending/';
-const dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
 const timeSpans = [new TimeSpan('since=daily', '今 天'), new TimeSpan('since=weekly', '本 周'), new TimeSpan('since=monthly', '本 月')];
+const dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
+const API_URL = 'https://github.com/trending/';
+const {Popover} = renderers;
 
 export default class TrendingPage extends Component {
     constructor(props) {
@@ -189,7 +189,7 @@ class TrendingTab extends Component {
             .then(result => {
                 this.items = result && result.items ? result.items : result ? result : [];
                 this.getFavoriteKeys();
-                if (!this.items || isRefresh && result && result.update_data && !dataRepository.checkData(result.update_data))
+                if (!this.items || isRefresh && result && result.update_data && !Utils.checkDate(result.update_data))
                     return dataRepository.fetchNetRepository(url);
             })
             .then(items => {
