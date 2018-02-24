@@ -138,7 +138,7 @@ class PopularTab extends Component {
             .then(result => {
                 this.items = result && result.items ? result.items : result ? result : [];
                 this.getFavoriteKeys();
-                if (result && result.update_data && !this.dataRepository.checkData(result.update_data)) return this.dataRepository.fetchNetRepository(url);
+                if (result && result.update_data && !Utils.checkDate(result.update_data)) return this.dataRepository.fetchNetRepository(url);
             })
             .then(items => {
                 if (!items || items.length === 0) return;

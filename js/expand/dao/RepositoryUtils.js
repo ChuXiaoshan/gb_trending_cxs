@@ -1,10 +1,6 @@
 /**
  * Created by CxS on 2018/2/7 15:22
  */
-
-import {
-    AsyncStorage
-} from 'react-native'
 import DataRepository, {FLAG_STORAGE} from './DataRepository';
 import Utils from "../../util/Utils";
 
@@ -25,10 +21,10 @@ export default class RepositoryUtils {
     updateData(k, v) {
         itemMap.set(k, v);
         let arr = [];
-        for(let value of itemMap.values()) {
+        for (let value of itemMap.values()) {
             arr.push(value);
         }
-        this.aboutCommon
+        this.aboutCommon.onNotifyDataChanged(arr);
     }
 
     /**
@@ -40,7 +36,7 @@ export default class RepositoryUtils {
             .then(r => {
                 if (r) {
                     this.updateData(url, r);
-                    if (!Utils.checkDate(r.update_date))
+                    if (!Utils.checkDate(r.update_data))
                         return this.dataRepository.fetchNetRepository(url);
                 }
             }).then((item) => {

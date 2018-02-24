@@ -9,12 +9,20 @@ import {MORE_MENU} from "../../common/MoreMenu";
 import GlobalStyles from "../../../res/styles/GlobalStyles";
 import AboutCommon, {FLAG_ABOUT} from './AboutCommon';
 import WebViewPage from '../WebViewPage';
+import config from '../../../res/data/config.json';
 
 export default class AboutPage extends Component {
 
     constructor(props) {
         super(props);
-        this.aboutCommon = new AboutCommon(props, (dic) => this.updateState(dic), FLAG_ABOUT.flag_about)
+        this.aboutCommon = new AboutCommon(props, (dic) => this.updateState(dic), FLAG_ABOUT.flag_about, config);
+        this.state = {
+            projectModels: []
+        }
+    }
+
+    componentDidMount() {
+        this.aboutCommon.componentDidMount()
     }
 
     updateState(dic) {
@@ -27,7 +35,7 @@ export default class AboutPage extends Component {
             case MORE_MENU.website:
                 TargetComponent = WebViewPage;
                 params.url = 'https://github.com/ChuXiaoshan/gb_trending_cxs';
-                params.title='gb_trending_cxs';
+                params.title = 'gb_trending_cxs';
                 break;
             case MORE_MENU.about_author:
                 break;
@@ -52,6 +60,7 @@ export default class AboutPage extends Component {
 
     render() {
         let content = <View>
+            {this.aboutCommon.renderRepository(this.state.projectModels)}
             {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.website), require('../../../res/images/ic_computer.png'), "网站", {tintColor: '#6495ED'})}
             <View style={GlobalStyles.line}/>
             {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.about_author), require('../my/img/ic_insert_emoticon.png'), '关于作者', {tintColor: '#6495ED'})}

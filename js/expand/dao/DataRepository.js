@@ -72,17 +72,28 @@ export default class DataRepository {
                         this.saveRepository(url, result);
                         resolve(result)
                     })
-
+                    .catch((error) => {
+                        reject(error)
+                    })
             } else {
                 fetch(url)
                     .then(response => response.json())
                     .then(result => {
-                        if (!result) {
-                            reject(new Error('responseData is null'));
-                            return;
+                        // if (!result || !result.items) {
+                        //     reject(new Error('responseData is null'));
+                        //     return;
+                        // }
+                        // this.saveRepository(url, result.items)
+                        // resolve(result.items);
+                        if (this.flag === FLAG_STORAGE.flag_my && result) {
+                            this.saveRepository(url, result);
+                            resolve(result)
+                        } else if (result && result.items) {
+                            this.saveRepository(url, result.items);
+                            resolve(result.items)
+                        } else {
+                            reject(new Error('responseData is null'))
                         }
-                        resolve(result.items);
-                        this.saveRepository(url, result.items)
                     })
                     .catch(error => {
                         reject(error)

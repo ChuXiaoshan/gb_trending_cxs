@@ -38,25 +38,25 @@ export default class RepositoryCell extends Component {
 
     render() {
         let item = this.props.projectModel.item ? this.props.projectModel.item : this.props.projectModel;
-        let favoriteButton = <TouchableOpacity
+        let favoriteButton = this.props.projectModel.item ? <TouchableOpacity
             onPress={() => this.onPressFavorite()}>
-            <Image style={{width: 22, height: 22, tintColor: '#2196f3'}} source={this.state.favoriteIcon}/>
-        </TouchableOpacity>;
+            <Image style={{width: 22, height: 22, tintColor: '#2196f3'}}
+                   source={this.state.favoriteIcon}/>
+        </TouchableOpacity> : null;
         return <TouchableOpacity
-            style={styles.container}
             onPress={this.props.onSelect}>
             <View style={styles.cell_container}>
                 <Text style={styles.title}>{item.full_name}</Text>
                 <Text style={styles.description}>{item.description}</Text>
-                <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
-                    <View style={{flexDirection: "row", alignItems: 'center'}}>
+                <View style={styles.row}>
+                    <View style={styles.row}>
                         <Text>Author:</Text>
-                        <Image
-                            style={{height: 22, width: 22}}
-                            source={{uri: item.owner.avatar_url}}/>
+                        {/*<Image*/}
+                            {/*style={{height: 22, width: 22}}*/}
+                            {/*source={{uri: item.owner.avatar_url}}/>*/}
                     </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text>Stars:</Text>
+                    <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+                        <Text>Star:</Text>
                         <Text>{item.stargazers_count}</Text>
                     </View>
                     {favoriteButton}
@@ -66,8 +66,10 @@ export default class RepositoryCell extends Component {
     }
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
+    row: {
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     title: {
         fontSize: 16,
@@ -81,7 +83,6 @@ const styles = StyleSheet.create({
     },
     cell_container: {
         backgroundColor: 'white',
-        borderRadius: 2,
         padding: 10,
         marginLeft: 5,
         marginRight: 5,
