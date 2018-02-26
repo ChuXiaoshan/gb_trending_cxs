@@ -4,10 +4,12 @@
 import React, {Component} from 'react';
 import {
     View,
+    Image,
     ListView,
     StyleSheet,
     RefreshControl,
     DeviceEventEmitter,
+    TouchableOpacity
 } from 'react-native';
 import NavigationBar from "../common/NavigationBar";
 import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
@@ -19,6 +21,7 @@ import ProjectsModel from '../model/ProjectModel';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import Utils from '../util/Utils';
 import ActionUtils from "../util/ActionUtils";
+import SearchPage from "./SearchPage";
 
 const QUERY_STR = '&sort=stars';
 const URL = 'https://api.github.com/search/repositories?q=';
@@ -49,7 +52,34 @@ export default class PopularPage extends Component {
             })
     }
 
+    renderRightButton() {
+        return <View>
+            <TouchableOpacity
+
+                onPress={() => {
+                    this.props.navigator.push({
+                        component: SearchPage,
+                        params: {
+                            ...this.props
+                        }
+                    })
+                }}>
+                <View style={{padding: 5, marginRight: 8}}>
+                    <Image
+                        style={{width: 24, height: 24}}
+                        source={require('../../res/images/ic_search_white_48pt.png')}/>
+                </View>
+            </TouchableOpacity>
+        </View>
+    }
+
     render() {
+        let navigation = <NavigationBar
+            title='最热'
+            statusBar={{backgroundColor: '#6495ED'}}
+            leftButton={this.renderRightButton()}
+            rightButton={this.renderRightButton()}
+            style={{backgroundColor: '#6495ED'}}/>;
         let content = this.state.languages.length > 0 ?
             <ScrollableTabView
                 tabBarBackgroundColor="#6495ED"
@@ -63,17 +93,12 @@ export default class PopularPage extends Component {
                     return lan.checked ? <PopularTab key={i} tabLabel={lan.name} {...this.props}/> : null;
                 })}
             </ScrollableTabView> : null;
-        return (
-            <View style={styles.container}>
-                <NavigationBar
-                    title='最热'
-                    statusBar={{
-                        backgroundColor: '#6495ED'
-                    }}
-                    style={{backgroundColor: '#6495ED'}}/>
-                {content}
-            </View>
-        )
+
+
+        return <View style={styles.container}>
+            {navigation}
+            {content}
+        </View>
     }
 }
 

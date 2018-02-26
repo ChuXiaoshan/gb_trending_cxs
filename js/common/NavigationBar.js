@@ -55,12 +55,10 @@ export default class NavigationBar extends Component {
             </View>
             {this.props.rightButton}
         </View>;
-        return (
-            <View style={[styles.container, this.props.style]}>
-                {status}
-                {content}
-            </View>
-        )
+        return <View style={[styles.container, this.props.style]}>
+            {status}
+            {content}
+        </View>
     }
 }
 
