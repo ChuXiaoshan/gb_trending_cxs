@@ -79,12 +79,6 @@ export default class DataRepository {
                 fetch(url)
                     .then(response => response.json())
                     .then(result => {
-                        // if (!result || !result.items) {
-                        //     reject(new Error('responseData is null'));
-                        //     return;
-                        // }
-                        // this.saveRepository(url, result.items)
-                        // resolve(result.items);
                         if (this.flag === FLAG_STORAGE.flag_my && result) {
                             this.saveRepository(url, result);
                             resolve(result)
@@ -101,10 +95,14 @@ export default class DataRepository {
             }
         })
     }
-
-    saveRepository(url, items, callBack) {
-        if (!url || !items) return;
-        let wrapData = {items: items, update_data: new Date().getTime()};
-        AsyncStorage.setItem(url, JSON.stringify(wrapData), callBack)
+    saveRepository(url, items, callback) {
+        if (!items || !url)return;
+        let wrapData;
+        if (this.flag === FLAG_STORAGE.flag_my) {
+            wrapData = {item: items, update_date: new Date().getTime()};
+        } else {
+            wrapData = {items: items, update_date: new Date().getTime()};
+        }
+        AsyncStorage.setItem(url, JSON.stringify(wrapData), callback);
     }
 }

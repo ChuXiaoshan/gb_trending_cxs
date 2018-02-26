@@ -18,6 +18,7 @@ import RepositoryDetail from './RepositoryDetail';
 import ProjectsModel from '../model/ProjectModel';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import Utils from '../util/Utils';
+import ActionUtils from "../util/ActionUtils";
 
 const QUERY_STR = '&sort=stars';
 const URL = 'https://api.github.com/search/repositories?q=';
@@ -190,12 +191,11 @@ class PopularTab extends Component {
 
     renderRow(projectModel) {
         return <RepositoryCell
-            onSelect={() => {
-                this.props.navigator.push({
-                    component: RepositoryDetail,
-                    params: {projectModel: projectModel, ...this.props, flag: FLAG_STORAGE.flag_popular},
-                })
-            }}
+            onSelect={() => ActionUtils.onSelectRepository({
+                projectModel: projectModel,
+                flag: FLAG_STORAGE.flag_popular,
+                ...this.props
+            })}
             key={projectModel.item.id}
             projectModel={projectModel}
             onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>

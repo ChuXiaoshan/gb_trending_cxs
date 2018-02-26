@@ -10,6 +10,7 @@ import GlobalStyles from "../../../res/styles/GlobalStyles";
 import AboutCommon, {FLAG_ABOUT} from './AboutCommon';
 import WebViewPage from '../WebViewPage';
 import config from '../../../res/data/config.json';
+import AboutMePage from "./AboutMePage";
 
 export default class AboutPage extends Component {
 
@@ -17,7 +18,8 @@ export default class AboutPage extends Component {
         super(props);
         this.aboutCommon = new AboutCommon(props, (dic) => this.updateState(dic), FLAG_ABOUT.flag_about, config);
         this.state = {
-            projectModels: []
+            projectModels: [],
+            author: config.author,
         }
     }
 
@@ -38,6 +40,7 @@ export default class AboutPage extends Component {
                 params.title = 'gb_trending_cxs';
                 break;
             case MORE_MENU.about_author:
+                TargetComponent = AboutMePage;
                 break;
             case MORE_MENU.feedback:
                 let url = 'mailto://xiaoshan1215@gmail.com';
@@ -71,8 +74,8 @@ export default class AboutPage extends Component {
         return this.aboutCommon.render(content, {
             'name': 'GitHub Popular',
             'description': '这是一个用来查看GitHub最受欢迎与最热项目的App，它基于React Native，支持Android和IOS双平台。',
-            'avatar': 'https://avatars0.githubusercontent.com/u/11240549?s=460&v=4',
-            'backgroundImg': 'https://avatars0.githubusercontent.com/u/11240549?s=460&v=4'
+            'avatar': this.state.author.avatar,
+            'backgroundImg': this.state.author.backgroundImg1
         })
     }
 }

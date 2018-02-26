@@ -19,6 +19,7 @@ import GlobalStyles from '../../../res/styles/GlobalStyles';
 import {MORE_MENU} from '../../common/MoreMenu';
 import {FLAG_LANGUAGE} from '../../expand/dao/LanguageDao';
 import AboutPage from '../about/AboutPage';
+import AboutMePage from "../about/AboutMePage";
 
 export default class MyPage extends Component {
     constructor(props) {
@@ -52,6 +53,7 @@ export default class MyPage extends Component {
             case MORE_MENU.custom_theme:
                 break;
             case MORE_MENU.about_author:
+                TargetComponent = AboutMePage;
                 break;
             case MORE_MENU.about:
                 TargetComponent = AboutPage;

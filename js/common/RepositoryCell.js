@@ -51,9 +51,9 @@ export default class RepositoryCell extends Component {
                 <View style={styles.row}>
                     <View style={styles.row}>
                         <Text>Author:</Text>
-                        {/*<Image*/}
-                            {/*style={{height: 22, width: 22}}*/}
-                            {/*source={{uri: item.owner.avatar_url}}/>*/}
+                        <Image
+                            style={{height: 22, width: 22}}
+                            source={{uri: item.owner.avatar_url}}/>
                     </View>
                     <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
                         <Text>Star:</Text>

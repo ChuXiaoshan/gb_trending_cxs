@@ -12,6 +12,7 @@ import Utils from "../../util/Utils";
 import RepositoryUtils from '../../expand/dao/RepositoryUtils';
 import RepositoryDetail from "../RepositoryDetail";
 import RepositoryCell from "../../common/RepositoryCell";
+import ActionUtils from "../../util/ActionUtils";
 
 export let FLAG_ABOUT = {flag_about: 'about', flag_about_me: 'about_me'};
 
@@ -43,10 +44,10 @@ export default class AboutCommon {
 
     /**
      * 通知数据发生改变
-     * @param items 改变的数据
+     * @param repositories 改变的数据
      */
-    onNotifyDataChanged(items) {
-        this.updateFavorite(items);
+    onNotifyDataChanged(repositories) {
+        this.updateFavorite(repositories);
     }
 
     /**
@@ -98,12 +99,17 @@ export default class AboutCommon {
             let projectModel = projectModels[i];
             views.push(
                 <RepositoryCell
-                    onSelect={() => {
-                        this.props.navigator.push({
-                            component: RepositoryDetail,
-                            params: {projectModel: projectModel, ...this.props, flag: FLAG_STORAGE.flag_popular},
-                        })
-                    }}
+                    onSelect={() => ActionUtils.onSelectRepository({
+                        projectModel: projectModel,
+                        ...this.props,
+                        flag: FLAG_STORAGE.flag_popular
+                    })}
+                    // onSelect={() => {
+                    //     this.props.navigator.push({
+                    //         component: RepositoryDetail,
+                    //         params: {projectModel: projectModel, ...this.props, flag: FLAG_STORAGE.flag_popular},
+                    //     })
+                    // }}
                     key={projectModel.item.id}
                     projectModel={projectModel}
                     onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>
@@ -233,7 +239,10 @@ const styles = StyleSheet.create({
     sectionTitleText: {
         color: 'white',
         fontSize: 18,
-        paddingVertical: 5
+        paddingVertical: 5,
+        paddingLeft: 5,
+        paddingRight: 5,
+        paddingBottom: 5
     },
     row: {
         overflow: 'hidden',

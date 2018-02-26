@@ -9,11 +9,11 @@ import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository';
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
 import NavigationBar from "../common/NavigationBar";
 import FavoriteDao from '../expand/dao/FavoriteDao';
-import RepositoryDetail from './RepositoryDetail';
 import TrendingCell from '../common/TrendingCell';
 import ProjectsModel from '../model/ProjectModel';
 import TimeSpan from '../model/TimeSpan';
 import Utils from "../util/Utils";
+import ActionUtils from "../util/ActionUtils";
 
 const timeSpans = [new TimeSpan('since=daily', '今 天'), new TimeSpan('since=weekly', '本 周'), new TimeSpan('since=monthly', '本 月')];
 const dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
@@ -220,12 +220,11 @@ class TrendingTab extends Component {
 
     renderRow(projectModel) {
         return <TrendingCell
-            onSelect={() => {
-                this.props.navigator.push({
-                    component: RepositoryDetail,
-                    params: {projectModel: projectModel, ...this.props, flag: FLAG_STORAGE.flag_trending}
-                })
-            }}
+            onSelect={() => ActionUtils.onSelectRepository({
+                projectModel: projectModel,
+                flag: FLAG_STORAGE.flag_trending,
+                ...this.props
+            })}
             key={projectModel.item.fullName}
             projectModel={projectModel}
             onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>

@@ -34,13 +34,14 @@ export default class ViewUtils {
                 onPress={callBack}>
                 <View style={styles.item}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Image source={icon}
+                        <Image source={icon ? icon : null}
                                resizeMode='stretch'
                                style={[{width: 16, height: 16, marginRight: 10}, tintStyle]}/>
                         <Text>{text}</Text>
                     </View>
                     <Image source={expandableIcon ? expandableIcon : require('../../res/images/ic_tiaozhuan.png')}
-                           style={[{marginRight: 10, height: 22, width: 22}, {tintColor: '#6495ED'}]}/>
+                           resizeMode='stretch'
+                           style={[{marginRight: 10, height: 22, width: 22}, tintStyle]}/>
                 </View>
             </TouchableHighlight>
         )

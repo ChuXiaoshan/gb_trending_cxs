@@ -18,6 +18,7 @@ import RepositoryDetail from './RepositoryDetail';
 import ProjectsModel from '../model/ProjectModel';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import ArrayUtils from '../util/ArrayUtils';
+import ActionUtils from "../util/ActionUtils";
 
 export default class FavPage extends Component {
     constructor(props) {
@@ -119,7 +120,7 @@ class FavTab extends Component {
         if (this.unFavoriteItems.length > 0) {
             if (this.props.flag === FLAG_STORAGE.flag_popular) {
                 DeviceEventEmitter.emit("favoriteChanged_popular")
-            }else {
+            } else {
                 DeviceEventEmitter.emit("favoriteChanged_trending")
             }
         }
@@ -130,12 +131,11 @@ class FavTab extends Component {
         let flag = this.props.flag === FLAG_STORAGE.flag_popular ? FLAG_STORAGE.flag_popular : FLAG_STORAGE.flag_trending;
         let id = this.props.flag === FLAG_STORAGE.flag_popular ? projectModel.item.id : projectModel.item.fullName;
         return <CellComponent
-            onSelect={() => {
-                this.props.navigator.push({
-                    component: RepositoryDetail,
-                    params: {projectModel: projectModel, ...this.props, flag: flag},
-                })
-            }}
+            onSelect={() => ActionUtils.onSelectRepository({
+                projectModel: projectModel,
+                flag: this.props.flag,
+                ...this.props
+            })}
             key={id}
             projectModel={projectModel}
             onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>
