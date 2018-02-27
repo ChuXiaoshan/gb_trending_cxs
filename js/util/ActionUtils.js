@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import RepositoryDetail from '../page/RepositoryDetail';
+import {FLAG_STORAGE} from "../expand/dao/DataRepository";
 
 export default class ActionUtils {
 
@@ -18,5 +19,21 @@ export default class ActionUtils {
                 ...params
             }
         })
+    }
+
+    /**
+     * favoriteIcon 的单击回调函数
+     * @param favoriteDao
+     * @param item
+     * @param isFavorite
+     * @param flag
+     */
+    static onFavorite(favoriteDao, item, isFavorite, flag) {
+        let key = flag === FLAG_STORAGE.flag_trending ? item.fullName : item.id.toString();
+        if (isFavorite) {
+            favoriteDao.saveFavoriteItem(key, JSON.stringify(item))
+        } else {
+            favoriteDao.removeFavoriteItem(key)
+        }
     }
 }

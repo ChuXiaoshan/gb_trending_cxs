@@ -16,7 +16,6 @@ import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository'
 import RepositoryCell from '../common/RepositoryCell'
 import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view'
 import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
-import RepositoryDetail from './RepositoryDetail';
 import ProjectsModel from '../model/ProjectModel';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import Utils from '../util/Utils';
@@ -164,7 +163,7 @@ class PopularTab extends Component {
             .then(result => {
                 this.items = result && result.items ? result.items : result ? result : [];
                 this.getFavoriteKeys();
-                if (result && result.update_data && !Utils.checkDate(result.update_data)) return this.dataRepository.fetchNetRepository(url);
+                if (result && result.update_date && !Utils.checkDate(result.update_data)) return this.dataRepository.fetchNetRepository(url);
             })
             .then(items => {
                 if (!items || items.length === 0) return;
@@ -201,19 +200,6 @@ class PopularTab extends Component {
         return URL + key + QUERY_STR;
     }
 
-    /**
-     * favoriteIcon 的单击回调函数
-     * @param item
-     * @param isFavorite
-     */
-    onFavorite(item, isFavorite) {
-        if (isFavorite) {
-            favoriteDao.saveFavoriteItem(item.id.toString(), JSON.stringify(item))
-        } else {
-            favoriteDao.removeFavoriteItem(item.id.toString())
-        }
-    }
-
     renderRow(projectModel) {
         return <RepositoryCell
             onSelect={() => ActionUtils.onSelectRepository({
@@ -223,7 +209,7 @@ class PopularTab extends Component {
             })}
             key={projectModel.item.id}
             projectModel={projectModel}
-            onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>
+            onFavorite={(item, isFavorite) => ActionUtils.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}/>
     }
 
     render() {

@@ -17,9 +17,9 @@ import ActionUtils from "../util/ActionUtils";
 
 const timeSpans = [new TimeSpan('since=daily', '今 天'), new TimeSpan('since=weekly', '本 周'), new TimeSpan('since=monthly', '本 月')];
 const dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
-const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
 const API_URL = 'https://github.com/trending/';
 const {Popover} = renderers;
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
 
 export default class TrendingPage extends Component {
     constructor(props) {
@@ -189,7 +189,7 @@ class TrendingTab extends Component {
             .then(result => {
                 this.items = result && result.items ? result.items : result ? result : [];
                 this.getFavoriteKeys();
-                if (!this.items || isRefresh && result && result.update_data && !Utils.checkDate(result.update_data))
+                if (!this.items || isRefresh && result && result.update_date && !Utils.checkDate(result.update_date))
                     return dataRepository.fetchNetRepository(url);
             })
             .then(items => {
@@ -205,19 +205,6 @@ class TrendingTab extends Component {
             })
     }
 
-    /**
-     * favoriteIcon 的单击回调函数
-     * @param item
-     * @param isFavorite
-     */
-    onFavorite(item, isFavorite) {
-        if (isFavorite) {
-            favoriteDao.saveFavoriteItem(item.fullName, JSON.stringify(item))
-        } else {
-            favoriteDao.removeFavoriteItem(item.fullName)
-        }
-    }
-
     renderRow(projectModel) {
         return <TrendingCell
             onSelect={() => ActionUtils.onSelectRepository({
@@ -227,7 +214,7 @@ class TrendingTab extends Component {
             })}
             key={projectModel.item.fullName}
             projectModel={projectModel}
-            onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>
+            onFavorite={(item, isFavorite) => ActionUtils.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_trending)}/>
     }
 
     render() {

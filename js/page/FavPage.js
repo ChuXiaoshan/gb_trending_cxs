@@ -110,12 +110,6 @@ class FavTab extends Component {
      * @param isFavorite
      */
     onFavorite(item, isFavorite) {
-        let key = this.props.flag === FLAG_STORAGE.flag_trending ? item.fullName : item.id.toString();
-        if (isFavorite) {
-            this.favoriteDao.saveFavoriteItem(key, JSON.stringify(item))
-        } else {
-            this.favoriteDao.removeFavoriteItem(key)
-        }
         ArrayUtils.updateArray(this.unFavoriteItems, item);
         if (this.unFavoriteItems.length > 0) {
             if (this.props.flag === FLAG_STORAGE.flag_popular) {
@@ -138,7 +132,7 @@ class FavTab extends Component {
             })}
             key={id}
             projectModel={projectModel}
-            onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>
+            onFavorite={(item, isFavorite) => ActionUtils.onFavorite(this.favoriteDao, item, isFavorite, this.props.flag)}/>
     }
 
     render() {

@@ -75,19 +75,6 @@ export default class AboutCommon {
     }
 
     /**
-     * favoriteIcon 的单击回调函数
-     * @param item
-     * @param isFavorite
-     */
-    onFavorite(item, isFavorite) {
-        if (isFavorite) {
-            this.favoriteDao.saveFavoriteItem(item.id.toString(), JSON.stringify(item))
-        } else {
-            this.favoriteDao.removeFavoriteItem(item.id.toString())
-        }
-    }
-
-    /**
      * 创建项目视图
      * @param projectModels
      * @returns {*}
@@ -104,15 +91,9 @@ export default class AboutCommon {
                         ...this.props,
                         flag: FLAG_STORAGE.flag_popular
                     })}
-                    // onSelect={() => {
-                    //     this.props.navigator.push({
-                    //         component: RepositoryDetail,
-                    //         params: {projectModel: projectModel, ...this.props, flag: FLAG_STORAGE.flag_popular},
-                    //     })
-                    // }}
                     key={projectModel.item.id}
                     projectModel={projectModel}
-                    onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}/>
+                    onFavorite={(item, isFavorite) => ActionUtils.onFavorite(this.favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}/>
             )
         }
         return views;
