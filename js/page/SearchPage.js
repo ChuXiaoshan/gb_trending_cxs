@@ -23,7 +23,9 @@ import ViewUtils from "../util/ViewUtils";
 import LanguageDao, {FLAG_LANGUAGE} from '../expand/dao/LanguageDao';
 import Toast, {DURATION} from 'react-native-easy-toast';
 import Utils from "../util/Utils";
+import MakeCancelable from '../util/Cancleable';
 import {ACTION_HOME} from "./HomePage";
+import makeCancelable from "../util/Cancleable";
 
 const QUERY_STR = '&sort=stars';
 const URL = 'https://api.github.com/search/repositories?q=';
@@ -49,7 +51,8 @@ export default class SearchPage extends Component {
         this.updateState({
             isLoading: true,
         });
-        fetch(this.getUrl(this.inputKey))
+        this.cancelable = makeCancelable(fetch(this.getUrl(this.inputKey)));
+        this.cancelable.promise
             .then(response => response.json())
             .then(responseData => {
                 if (!this || !responseData || !responseData.items || responseData.items.length === 0) {
@@ -130,7 +133,7 @@ export default class SearchPage extends Component {
             };
             this.keys.unshift(key);
             this.languageDao.save(this.keys);
-            this.toast.show(key.name + " 保存成功", DURATION.LENGTH_SHORT)
+            this.toast.show(key.name + " 保存成功", DURATION.LENGTH_SHORT);
             this.isKeyChange = true;
         }
     }
@@ -165,7 +168,8 @@ export default class SearchPage extends Component {
             this.updateState({rightButtonText: '取消'});
             this.loadData()
         } else {
-            this.updateState({rightButtonText: '搜索', isLoading: false})
+            this.updateState({rightButtonText: '搜索', isLoading: false});
+            this.cancelable.cancel()
         }
     }
 

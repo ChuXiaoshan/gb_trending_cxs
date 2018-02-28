@@ -92,12 +92,10 @@ export default class TrendingPage extends Component {
                     return lan.checked ? <TrendingTab key={i} tabLabel={lan.name} timeSpan={this.state.timeSpan} {...this.props}/> : null;
                 })}
             </ScrollableTabView> : null;
-        return (
-            <MenuProvider style={styles.container}>
+        return <MenuProvider style={styles.container}>
                 {navigationBar}
                 {content}
             </MenuProvider>
-        )
     }
 }
 

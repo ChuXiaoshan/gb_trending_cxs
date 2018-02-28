@@ -2,12 +2,7 @@
  * Created by CxS on 2017/12/28 14:29
  */
 import React, {Component} from 'react';
-import {
-    View,
-    Image,
-    StyleSheet,
-    DeviceEventEmitter
-} from 'react-native';
+import {DeviceEventEmitter, Image, StyleSheet, View} from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
 import PopularPage from './PopularPage'
 import FavPage from './FavPage'
@@ -16,6 +11,13 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import TrendingPage from './TrendingPage';
 
 export const ACTION_HOME = {A_SHOW_TOAST: 'showToast', A_RESTART: 'restart'};
+export const FLAG_TAB = {
+    flag_popular_tab: 'tb_popular',
+    flag_trending_tab: 'tb_trending',
+    flag_favorite_tab: 'tb_favorite',
+    flag_my: 'tb_my'
+};
+
 export default class App extends Component {
     constructor(props) {
         super(props);
@@ -26,7 +28,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        this.listener = DeviceEventEmitter.addListener("showToast", (action, params) => this.onAction(action, params))
+        this.listener = DeviceEventEmitter.addListener("ACTION_HOME", (action, params) => this.onAction(action, params))
     }
 
     /**
@@ -36,11 +38,10 @@ export default class App extends Component {
      */
     onAction(action, params) {
         if (ACTION_HOME.A_RESTART === action) {
-            this.onRestart();
+            this.onRestart(params);
         } else if (ACTION_HOME.A_SHOW_TOAST === action) {
-
+            this.toast.show(params.text, DURATION.LENGTH_SHORT);
         }
-        this.toast.show(params.text, DURATION.LENGTH_SHORT);
     }
 
     /**
