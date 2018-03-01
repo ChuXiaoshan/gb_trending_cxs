@@ -22,10 +22,10 @@ const StatusBarShape = {
 
 export default class NavigationBar extends Component {
     static propTypes = {
-        style: View.propTypes.style,
-        title: PropTypes.string,
-        titleView: PropTypes.element,
         hide: PropTypes.bool,
+        title: PropTypes.string,
+        style: View.propTypes.style,
+        titleView: PropTypes.element,
         leftButton: PropTypes.element,
         rightButton: PropTypes.element,
         statusBar: PropTypes.shape(StatusBarShape)
@@ -45,15 +45,21 @@ export default class NavigationBar extends Component {
         }
     }
 
+    getButtonElement(data) {
+        return <View style={styles.navBarButton}>
+            {data ? data : null}
+        </View>
+    }
+
     render() {
         let status = <View style={[styles.statusBar]}><StatusBar {...this.props.statusBar}/></View>;
         let titleView = this.props.titleView ? this.props.titleView : <Text style={styles.title}>{this.props.title}</Text>;
         let content = <View style={styles.navBar}>
-            {this.props.leftButton}
+            {this.getButtonElement(this.props.leftButton)}
             <View style={styles.titleViewContainer}>
                 {titleView}
             </View>
-            {this.props.rightButton}
+            {this.getButtonElement(this.props.rightButton)}
         </View>;
         return <View style={[styles.container, this.props.style]}>
             {status}
@@ -84,6 +90,9 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         color: 'white'
+    },
+    navBarButton: {
+        alignItems: 'center'
     },
     statusBar: {
         height: Platform.OS === 'ios' ? STATUS_BAR_HEIGHT : 0

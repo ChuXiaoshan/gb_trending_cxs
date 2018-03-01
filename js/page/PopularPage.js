@@ -76,7 +76,6 @@ export default class PopularPage extends Component {
         let navigation = <NavigationBar
             title='最热'
             statusBar={{backgroundColor: '#6495ED'}}
-            leftButton={this.renderRightButton()}
             rightButton={this.renderRightButton()}
             style={{backgroundColor: '#6495ED'}}/>;
         let content = this.state.languages.length > 0 ?

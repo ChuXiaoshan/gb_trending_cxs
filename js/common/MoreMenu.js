@@ -16,51 +16,88 @@ import ProjectsModel from '../model/ProjectModel';
 import TimeSpan from '../model/TimeSpan';
 import Utils from "../util/Utils";
 import ActionUtils from "../util/ActionUtils";
+import ViewUtil from "../util/ViewUtils";
+import CustomKeyPage from "../page/my/CustomKeyPage";
+import AboutMePage from "../page/about/AboutMePage";
+import SortKeyPage from "../page/my/SortKeyPage";
+import AboutPage from "../page/about/AboutPage";
 
-const {Popover} = renderers;
+const {ContextMenu} = renderers;
 
 export const MORE_MENU = {
-    custom_language: 'Custom Language',
-    sort_language: 'Sort Language',
-    custom_key: 'Custom Key',
-    sort_key: 'Sort Key',
-    remove_key: 'Remove Key',
-    about_author: 'About Author',
-    custom_theme: 'Custom Theme',
-    about: 'About',
-    website: 'website',
-    feedback: 'feedback',
+    custom_language: '自定义语言',
+    sort_language: '语言排序',
+    custom_theme: '自定义主题',
+    custom_key: '自定义标签',
+    sort_key: '标签排序',
+    remove_key: '移除标签',
+    about_author: '关于作者',
+    about: '关于',
+    website: 'Website',
+    feedback: '反馈',
+    share: '分享'
 };
 
-export default class MoreMenu extends Component {
-    renderMoreView() {
+export default class MoreMenu {
+
+    static onOptionClick(tab, navigator) {
+        let TargetComponent, params = {...this.props, menuType: tab};
+        switch (tab) {
+            case MORE_MENU.custom_language:
+                TargetComponent = CustomKeyPage;
+                params.flag = FLAG_LANGUAGE.flag_language;
+                break;
+            case MORE_MENU.custom_key:
+                TargetComponent = CustomKeyPage;
+                params.flag = FLAG_LANGUAGE.flag_key;
+                break;
+            case MORE_MENU.remove_key:
+                TargetComponent = CustomKeyPage;
+                params.flag = FLAG_LANGUAGE.flag_key;
+                params.isRemoveKey = true;
+                break;
+            case MORE_MENU.sort_key:
+                TargetComponent = SortKeyPage;
+                params.flag = FLAG_LANGUAGE.flag_key;
+                break;
+            case MORE_MENU.sort_language:
+                TargetComponent = SortKeyPage;
+                params.flag = FLAG_LANGUAGE.flag_language;
+                break;
+            case MORE_MENU.custom_theme:
+                break;
+            case MORE_MENU.about_author:
+                TargetComponent = AboutMePage;
+                break;
+            case MORE_MENU.about:
+                TargetComponent = AboutPage;
+                break;
+        }
+        if (TargetComponent) {
+            navigator.push({
+                component: TargetComponent,
+                params: params
+            })
+        }
+    }
+
+    static renderMoreView(params) {
         return <Menu
-            onSelect={(value) => {
-                this.setState({
-                    timeName: value.showText,
-                    timeSpan: value.searchText
-                })
-            }}
-            renderer={Popover}
-            rendererProps={{preferredPlacement: 'bottom'}}>
+            onSelect={(value) => this.onOptionClick(value, params.navigator)}
+            renderer={ContextMenu}>
             <MenuTrigger>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Text style={{fontSize: 18, color: 'white', fontWeight: '400'}}>趋势 {this.state.timeName}</Text>
-                    <Image style={{width: 12, height: 12, marginLeft: 5}} source={require('../../res/images/ic_spinner_triangle.png')}/>
+                <View>
+                    <Image style={{width: 24, height: 24, marginRight: 5}} source={require('../../res/images/ic_more_vert_white_48pt.png')}/>
                 </View>
             </MenuTrigger>
             <MenuOptions>
-                <MenuOption style={styles.menuOption} value={1} text={"1"}/>
-                <MenuOption style={styles.menuOption} value={2} text={"2"}/>
-                <MenuOption style={styles.menuOption} value={3} text={"3"}/>
-                <MenuOption style={styles.menuOption} value={4} text={"4"}/>
-                <MenuOption style={styles.menuOption} value={5} text={"5"}/>
+                <View>
+                    {params.items.map((result, i, arr) => {
+                        return <MenuOption style={styles.menuOption} key={i} value={arr[i]} text={arr[i]}/>
+                    })}
+                </View>
             </MenuOptions>
         </Menu>
-    }
-
-    render() {
-        return this.renderMoreView();
     }
 }
 

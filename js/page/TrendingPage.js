@@ -14,6 +14,7 @@ import ProjectsModel from '../model/ProjectModel';
 import TimeSpan from '../model/TimeSpan';
 import Utils from "../util/Utils";
 import ActionUtils from "../util/ActionUtils";
+import MoreMenu, {MORE_MENU} from "../common/MoreMenu";
 
 const timeSpans = [new TimeSpan('since=daily', '今 天'), new TimeSpan('since=weekly', '本 周'), new TimeSpan('since=monthly', '本 月')];
 const dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
@@ -79,6 +80,7 @@ export default class TrendingPage extends Component {
             statusBar={{
                 backgroundColor: '#6495ED'
             }}
+            rightButton={MoreMenu.renderMoreView({items: [MORE_MENU.custom_language, MORE_MENU.custom_theme, MORE_MENU.custom_key], navigator: navigator})}
             style={{backgroundColor: '#6495ED'}}/>;
         let content = this.state.languages.length > 0 ?
             <ScrollableTabView
@@ -93,9 +95,9 @@ export default class TrendingPage extends Component {
                 })}
             </ScrollableTabView> : null;
         return <MenuProvider style={styles.container}>
-                {navigationBar}
-                {content}
-            </MenuProvider>
+            {navigationBar}
+            {content}
+        </MenuProvider>
     }
 }
 
