@@ -80,7 +80,7 @@ export default class TrendingPage extends Component {
             statusBar={{
                 backgroundColor: '#6495ED'
             }}
-            rightButton={MoreMenu.renderMoreView({items: [MORE_MENU.custom_language, MORE_MENU.custom_theme, MORE_MENU.custom_key], navigator: navigator})}
+            // rightButton={MoreMenu}
             style={{backgroundColor: '#6495ED'}}/>;
         let content = this.state.languages.length > 0 ?
             <ScrollableTabView

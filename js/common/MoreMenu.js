@@ -38,52 +38,52 @@ export const MORE_MENU = {
     share: '分享'
 };
 
-export default class MoreMenu {
+export default class MoreMenu extends Menu {
 
-    static onOptionClick(tab, navigator) {
-        let TargetComponent, params = {...this.props, menuType: tab};
-        switch (tab) {
-            case MORE_MENU.custom_language:
-                TargetComponent = CustomKeyPage;
-                params.flag = FLAG_LANGUAGE.flag_language;
-                break;
-            case MORE_MENU.custom_key:
-                TargetComponent = CustomKeyPage;
-                params.flag = FLAG_LANGUAGE.flag_key;
-                break;
-            case MORE_MENU.remove_key:
-                TargetComponent = CustomKeyPage;
-                params.flag = FLAG_LANGUAGE.flag_key;
-                params.isRemoveKey = true;
-                break;
-            case MORE_MENU.sort_key:
-                TargetComponent = SortKeyPage;
-                params.flag = FLAG_LANGUAGE.flag_key;
-                break;
-            case MORE_MENU.sort_language:
-                TargetComponent = SortKeyPage;
-                params.flag = FLAG_LANGUAGE.flag_language;
-                break;
-            case MORE_MENU.custom_theme:
-                break;
-            case MORE_MENU.about_author:
-                TargetComponent = AboutMePage;
-                break;
-            case MORE_MENU.about:
-                TargetComponent = AboutPage;
-                break;
-        }
-        if (TargetComponent) {
-            navigator.push({
-                component: TargetComponent,
-                params: params
-            })
-        }
-    }
+    // onOptionClick(tab, params) {
+    //     let TargetComponent;
+    //     switch (tab) {
+    //         case MORE_MENU.custom_language:
+    //             TargetComponent = CustomKeyPage;
+    //             params.flag = FLAG_LANGUAGE.flag_language;
+    //             break;
+    //         case MORE_MENU.custom_key:
+    //             TargetComponent = CustomKeyPage;
+    //             params.flag = FLAG_LANGUAGE.flag_key;
+    //             break;
+    //         case MORE_MENU.remove_key:
+    //             TargetComponent = CustomKeyPage;
+    //             params.flag = FLAG_LANGUAGE.flag_key;
+    //             params.isRemoveKey = true;
+    //             break;
+    //         case MORE_MENU.sort_key:
+    //             TargetComponent = SortKeyPage;
+    //             params.flag = FLAG_LANGUAGE.flag_key;
+    //             break;
+    //         case MORE_MENU.sort_language:
+    //             TargetComponent = SortKeyPage;
+    //             params.flag = FLAG_LANGUAGE.flag_language;
+    //             break;
+    //         case MORE_MENU.custom_theme:
+    //             break;
+    //         case MORE_MENU.about_author:
+    //             TargetComponent = AboutMePage;
+    //             break;
+    //         case MORE_MENU.about:
+    //             TargetComponent = AboutPage;
+    //             break;
+    //     }
+    //     if (TargetComponent) {
+    //         params.navigator.push({
+    //             component: TargetComponent,
+    //             params: params
+    //         })
+    //     }
+    // }
 
-    static renderMoreView(params) {
+    render() {
         return <Menu
-            onSelect={(value) => this.onOptionClick(value, params.navigator)}
+            // onSelect={(value) => this.onOptionClick(value, params)}
             renderer={ContextMenu}>
             <MenuTrigger>
                 <View>
@@ -91,11 +91,12 @@ export default class MoreMenu {
                 </View>
             </MenuTrigger>
             <MenuOptions>
-                <View>
-                    {params.items.map((result, i, arr) => {
-                        return <MenuOption style={styles.menuOption} key={i} value={arr[i]} text={arr[i]}/>
-                    })}
-                </View>
+                        return <MenuOption style={styles.menuOption} key={'1'} value={'1'} text={'1'}/>
+                {/*<View>*/}
+                    {/*{params.items.map((result, i, arr) => {*/}
+                        {/*return <MenuOption style={styles.menuOption} key={i} value={arr[i]} text={arr[i]}/>*/}
+                    {/*})}*/}
+                {/*</View>*/}
             </MenuOptions>
         </Menu>
     }
