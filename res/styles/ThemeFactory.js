@@ -2,7 +2,7 @@
  * Created by CxS on 2018/3/2 14:53
  */
 
-import React, {Component} from 'react';
+import React from 'react';
 import {
     StyleSheet,
 } from 'react-native';
@@ -30,3 +30,27 @@ export const ThemeFlags = {
     BlueGrey: '#607D8B',
     Black: '#000000'
 };
+
+export default class ThemeFactory {
+    /**
+     * 创建一个主题样式
+     * @param themeFlag 主题标识
+     * @returns {{themeColor: *, styles}}
+     */
+    static createTheme(themeFlag) {
+        return {
+            themeColor: themeFlag,
+            styles: StyleSheet.create({
+                selectedTitleStyle: {
+                    color: themeFlag,
+                },
+                tabBarSelectedIcon: {
+                    tintColor: themeFlag,
+                },
+                navBar: {
+                    backgroundColor: themeFlag,
+                }
+            }),
+        }
+    }
+}

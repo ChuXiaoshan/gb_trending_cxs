@@ -11,12 +11,6 @@ import Toast, {DURATION} from 'react-native-easy-toast';
 import TrendingPage from './TrendingPage';
 
 export const ACTION_HOME = {A_SHOW_TOAST: 'showToast', A_RESTART: 'restart'};
-export const FLAG_TAB = {
-    flag_popular_tab: 'tb_popular',
-    flag_trending_tab: 'tb_trending',
-    flag_favorite_tab: 'tb_favorite',
-    flag_my: 'tb_my'
-};
 
 export default class App extends Component {
     constructor(props) {
@@ -24,6 +18,7 @@ export default class App extends Component {
         let selectedTab = this.props.selectedTab ? this.props.selectedTab : 'tb_popular';
         this.state = {
             selectedTab: selectedTab,
+            theme: this.props.theme,
         }
     }
 
@@ -65,10 +60,10 @@ export default class App extends Component {
     _renderTab(Component, selectTab, title, renderIcon) {
         return <TabNavigator.Item
             title={title}
-            selectedTitleStyle={{color: 'red'}}
+            selectedTitleStyle={this.state.theme.styles.selectedTitleStyle}
             selected={this.state.selectedTab === selectTab}
             renderIcon={() => <Image style={styles.image} source={renderIcon}/>}
-            renderSelectedIcon={() => <Image style={[styles.image, {tintColor: 'red'}]} source={renderIcon}/>}
+            renderSelectedIcon={() => <Image style={[styles.image, this.state.theme.styles.tabBarSelectedIcon]} source={renderIcon}/>}
             onPress={() => this.setState({selectedTab: selectTab})}>
             <Component {...this.props}/>
         </TabNavigator.Item>

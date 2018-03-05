@@ -23,7 +23,9 @@ import ActionUtils from "../util/ActionUtils";
 export default class FavPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            theme: this.props.theme
+        }
     }
 
     render() {

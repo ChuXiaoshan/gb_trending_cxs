@@ -31,7 +31,8 @@ export default class PopularPage extends Component {
         super(props);
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
         this.state = {
-            languages: []
+            languages: [],
+            theme: this.props.theme
         }
     }
 
@@ -73,14 +74,17 @@ export default class PopularPage extends Component {
     }
 
     render() {
+        let statusBar = {
+            backgroundColor: this.state.theme.themeColor
+        };
         let navigation = <NavigationBar
             title='最热'
-            statusBar={{backgroundColor: '#6495ED'}}
+            statusBar={statusBar}
             rightButton={this.renderRightButton()}
-            style={{backgroundColor: '#6495ED'}}/>;
+            style={this.state.theme.styles.navBar}/>;
         let content = this.state.languages.length > 0 ?
             <ScrollableTabView
-                tabBarBackgroundColor="#6495ED"
+                tabBarBackgroundColor={this.state.theme.themeColor}
                 tabBarInactiveTextColor="mintcream"
                 tabBarActiveTextColor="white"
                 tabBarUnderlineStyle={{backgroundColor: '#e7e7e7', height: 2}}
@@ -109,7 +113,8 @@ class PopularTab extends Component {
             result: '',
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             isLoading: false,
-            favoriteKeys: []
+            favoriteKeys: [],
+            theme: this.props.theme
         }
     }
 
@@ -208,6 +213,7 @@ class PopularTab extends Component {
             })}
             key={projectModel.item.id}
             projectModel={projectModel}
+            theme={this.props.theme}
             onFavorite={(item, isFavorite) => ActionUtils.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}/>
     }
 
@@ -220,10 +226,10 @@ class PopularTab extends Component {
                     <RefreshControl
                         refreshing={this.state.isLoading}
                         onRefresh={() => this.onLoad()}
-                        colors={["#2196F3", 'red', 'green']}
-                        tintColor={'#2196F3'}
+                        colors={[this.state.theme.themeColor, 'red', 'green']}
+                        tintColor={this.state.theme.themeColor}
                         title={'Loading...'}
-                        titleColor={"#2196F3"}
+                        titleColor={this.state.theme.themeColor}
                     />}
             />
         </View>
