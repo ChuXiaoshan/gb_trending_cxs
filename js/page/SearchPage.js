@@ -190,7 +190,7 @@ export default class SearchPage extends Component {
             </View>
         </TouchableOpacity>;
         return <View style={{
-            backgroundColor: '#6495ED',
+            backgroundColor: this.props.theme.themeColor,
             flexDirection: 'row',
             alignItems: 'center',
             height: Platform.OS === 'ios' ? GlobalStyles.nav_bar_height_ios : GlobalStyles.nav_bar_height_android,
@@ -210,12 +210,13 @@ export default class SearchPage extends Component {
             })}
             key={projectModel.item.id}
             projectModel={projectModel}
+            theme={this.props.theme}
             onFavorite={(item, isFavorite) => ActionUtils.onFavorite(this.favoriteDao, item, isFavorite, FLAG_STORAGE.flag_trending)}/>
     }
 
     render() {
         let statusBar = null;
-        if (Platform.OS === 'ios') statusBar = <View style={[styles.statusBar, {backgroundColor: '#6495ED'}]}/>;
+        if (Platform.OS === 'ios') statusBar = <View style={[styles.statusBar, this.props.theme.styles.navBar]}/>;
         let listView = !this.state.isLoading ? <ListView
             dataSource={this.state.dataSource}
             renderRow={(e) => this.renderRow(e)}/> : null;
@@ -228,7 +229,7 @@ export default class SearchPage extends Component {
             {listView}</View>;
         let bottomButton = this.state.showBottomButton ? <TouchableOpacity
             onPress={() => this.saveKey()}
-            style={[styles.bottomButton, {backgroundColor: "#6495ED"}]}>
+            style={[styles.bottomButton, this.props.theme.styles.navBar]}>
             <View style={{justifyContent: 'center'}}>
                 <Text style={styles.title}>添加标签</Text>
             </View>

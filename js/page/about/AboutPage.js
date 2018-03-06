@@ -64,11 +64,11 @@ export default class AboutPage extends Component {
     render() {
         let content = <View>
             {this.aboutCommon.renderRepository(this.state.projectModels)}
-            {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.website), require('../../../res/images/ic_computer.png'), "网站", {tintColor: '#6495ED'})}
+            {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.website), require('../../../res/images/ic_computer.png'), "网站", this.props.theme.styles.tabBarSelectedIcon)}
             <View style={GlobalStyles.line}/>
-            {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.about_author), require('../my/img/ic_insert_emoticon.png'), '关于作者', {tintColor: '#6495ED'})}
+            {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.about_author), require('../my/img/ic_insert_emoticon.png'), '关于作者', this.props.theme.styles.tabBarSelectedIcon)}
             <View style={GlobalStyles.line}/>
-            {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.feedback), require('../../../res/images/ic_feedback.png'), '反馈', {tintColor: '#6495ED'})}
+            {ViewUtils.getSettingItem(() => this.onClick(MORE_MENU.feedback), require('../../../res/images/ic_feedback.png'), '反馈', this.props.theme.styles.tabBarSelectedIcon)}
             <View style={GlobalStyles.line}/>
         </View>;
         return this.aboutCommon.render(content, {

@@ -124,10 +124,10 @@ export default class CustomKeyPage extends Component {
                       leftText={leftText}
                       isChecked={isChecked}
                       checkedImage={<Image
-                          style={{tintColor: '#6495ED'}}
+                          style={this.props.theme.styles.tabBarSelectedIcon}
                           source={require('./img/ic_check_box.png')}/>}
                       unCheckedImage={<Image
-                          style={{tintColor: '#6495ED'}}
+                          style={this.props.theme.styles.tabBarSelectedIcon}
                           source={require('./img/ic_check_box_outline_blank.png')}/>}
             />)
     }
@@ -142,11 +142,12 @@ export default class CustomKeyPage extends Component {
                 <Text style={styles.title}>{rightButtonTitle}</Text>
             </View>
         </TouchableOpacity>;
+        let statusBar = {backgroundColor: this.props.theme.themeColor};
         return (<View style={styles.container}>
             <NavigationBar
                 title={title}
-                statusBar={{backgroundColor: '#6495ED'}}
-                style={{backgroundColor: '#6495ED'}}
+                statusBar={statusBar}
+                style={this.props.theme.styles.navBar}
                 leftButton={ViewUtils.getLeftButton(() => this.onBack())}
                 rightButton={rightButton}/>
             <ScrollView>

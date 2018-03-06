@@ -87,16 +87,17 @@ export default class RepositoryDetail extends Component {
     }
 
     render() {
+        let statusBar = {
+            backgroundColor: this.props.theme.themeColor
+        };
         return (
             <View style={styles.container}>
                 <NavigationBar
                     title={this.state.title}
-                    statusBar={{
-                        backgroundColor: '#6495ED'
-                    }}
+                    statusBar={statusBar}
                     rightButton={this.renderRightButton()}
                     leftButton={ViewUtils.getLeftButton(() => this.onBack())}
-                    style={{backgroundColor: '#6495ED'}}/>
+                    style={this.props.theme.styles.navBar}/>
                 <WebView
                     ref={webView => this.webView = webView}
                     source={{uri: this.state.url}}

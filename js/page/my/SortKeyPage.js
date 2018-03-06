@@ -25,7 +25,8 @@ export default class SortKeyPage extends Component {
         this.sortResultArray = [];
         this.originalCheckedArray = [];
         this.state = {
-            checkedArray: []
+            checkedArray: [],
+            theme: this.props.theme
         }
     }
 
@@ -108,13 +109,14 @@ export default class SortKeyPage extends Component {
             </View>
         </TouchableOpacity>;
         let title = this.props.flag === FLAG_LANGUAGE.flag_language ? '语言排序' : '标签排序';
+        let statusBar = {backgroundColor: this.props.theme.themeColor};
         return (<View style={styles.container}>
             <NavigationBar
                 title={title}
                 leftButton={ViewUtils.getLeftButton(() => this.onBack())}
                 rightButton={rightButton}
-                statusBar={{backgroundColor: '#6495ED'}}
-                style={{backgroundColor: '#6495ED'}}/>
+                statusBar={statusBar}
+                style={this.props.theme.styles.navBar}/>
             <SortableListView
                 data={this.state.checkedArray}
                 order={Object.keys(this.state.checkedArray)}

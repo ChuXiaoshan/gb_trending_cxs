@@ -27,6 +27,7 @@ export default class MyPage extends Component {
         super(props);
         this.state = {
             customThemeViewVisible: false,
+            theme: this.props.theme
         }
     }
 
@@ -80,14 +81,17 @@ export default class MyPage extends Component {
     }
 
     getItem(tag, icon, text) {
-        return ViewUtil.getSettingItem(() => this.onClick(tag), icon, text, {tintColor: '#6495ED'}, null)
+        return ViewUtil.getSettingItem(() => this.onClick(tag), icon, text, {tintColor: this.state.theme.themeColor}, null)
     }
 
     render() {
+        let statusBar = {
+            backgroundColor: this.state.theme.themeColor
+        };
         let navigationBar = <NavigationBar
             title='我的'
-            statusBar={{backgroundColor: '#6495ED'}}
-            style={{backgroundColor: '#6495ED'}}/>;
+            statusBar={statusBar}
+            style={this.state.theme.styles.navBar}/>;
         return (<View style={GlobalStyles.root_container}>
             {navigationBar}
             <ScrollView>
@@ -96,11 +100,11 @@ export default class MyPage extends Component {
                     <View style={[styles.item, {height: 90}]}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Image source={require('../../../res/images/ic_trending.png')}
-                                   style={[{width: 40, height: 40, marginRight: 10}, {tintColor: '#6495ED'}]}/>
+                                   style={[{width: 40, height: 40, marginRight: 10}, {tintColor: this.state.theme.themeColor}]}/>
                             <Text>GitHub Popular</Text>
                         </View>
                         <Image source={require('../../../res/images/ic_tiaozhuan.png')}
-                               style={[{marginRight: 10, height: 22, width: 22}, {tintColor: '#6495ED'}]}/>
+                               style={[{marginRight: 10, height: 22, width: 22}, {tintColor: this.state.theme.themeColor}]}/>
                     </View>
                 </TouchableHighlight>
                 <View style={GlobalStyles.line}/>

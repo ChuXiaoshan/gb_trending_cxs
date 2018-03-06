@@ -30,7 +30,7 @@ export default class FavPage extends Component {
 
     render() {
         let content = <ScrollableTabView
-            tabBarBackgroundColor="#6495ED"
+            tabBarBackgroundColor={this.state.theme.themeColor}
             tabBarInactiveTextColor="mintcream"
             tabBarActiveTextColor="white"
             tabBarUnderlineStyle={{backgroundColor: '#e7e7e7', height: 2}}
@@ -38,14 +38,16 @@ export default class FavPage extends Component {
             <FavTab tabLabel='最热' flag={FLAG_STORAGE.flag_popular} {...this.props}/>
             <FavTab tabLabel='趋势' flag={FLAG_STORAGE.flag_trending} {...this.props}/>
         </ScrollableTabView>;
+
+        let statusBar = {
+            backgroundColor: this.state.theme.themeColor
+        };
         return (
             <View style={styles.container}>
                 <NavigationBar
                     title='收藏'
-                    statusBar={{
-                        backgroundColor: '#6495ED'
-                    }}
-                    style={{backgroundColor: '#6495ED'}}/>
+                    statusBar={statusBar}
+                    style={this.state.theme.styles.navBar}/>
                 {content}
             </View>
         )
@@ -60,7 +62,8 @@ class FavTab extends Component {
         this.state = {
             dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             isLoading: false,
-            favoriteKeys: []
+            favoriteKeys: [],
+            theme: this.props.theme
         }
     }
 
@@ -133,6 +136,7 @@ class FavTab extends Component {
                 ...this.props
             })}
             key={id}
+            theme={this.props.theme}
             projectModel={projectModel}
             onFavorite={(item, isFavorite) => ActionUtils.onFavorite(this.favoriteDao, item, isFavorite, this.props.flag)}/>
     }
@@ -147,10 +151,10 @@ class FavTab extends Component {
                     <RefreshControl
                         refreshing={this.state.isLoading}
                         onRefresh={() => this.onLoad()}
-                        colors={["#2196F3", 'red', 'green']}
-                        tintColor={'#2196F3'}
+                        colors={[this.state.theme.themeColor, 'red', 'green']}
+                        tintColor={this.state.theme.themeColor}
                         title={'Loading...'}
-                        titleColor={"#2196F3"}
+                        titleColor={this.state.theme.themeColor}
                     />}
             />
         </View>
