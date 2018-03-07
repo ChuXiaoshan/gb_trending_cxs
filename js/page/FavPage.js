@@ -19,8 +19,9 @@ import ProjectsModel from '../model/ProjectModel';
 import FavoriteDao from '../expand/dao/FavoriteDao';
 import ArrayUtils from '../util/ArrayUtils';
 import ActionUtils from "../util/ActionUtils";
+import BaseComponent from "./BaseComponent";
 
-export default class FavPage extends Component {
+export default class FavPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {

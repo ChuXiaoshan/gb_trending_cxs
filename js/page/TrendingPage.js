@@ -15,6 +15,7 @@ import TimeSpan from '../model/TimeSpan';
 import Utils from "../util/Utils";
 import ActionUtils from "../util/ActionUtils";
 import MoreMenu, {MORE_MENU} from "../common/MoreMenu";
+import BaseComponent from "./BaseComponent";
 
 const timeSpans = [new TimeSpan('since=daily', '今 天'), new TimeSpan('since=weekly', '本 周'), new TimeSpan('since=monthly', '本 月')];
 const dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
@@ -22,7 +23,7 @@ const API_URL = 'https://github.com/trending/';
 const {Popover} = renderers;
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
 
-export default class TrendingPage extends Component {
+export default class TrendingPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_language);
@@ -31,10 +32,7 @@ export default class TrendingPage extends Component {
             timeName: '今天',
             languages: [],
             theme: this.props.theme
-        }
-    }
-
-    componentDidMount() {
+        };
         this.load();
     }
 
@@ -133,6 +131,9 @@ class TrendingTab extends Component {
         } else if (this.isFavoriteChanged) {
             this.isFavoriteChanged = false;
             this.getFavoriteKeys();
+        } else if (nextProps.theme !== this.state.theme) {
+            this.updateState({theme: nextProps.theme});
+            this.flushFavoriteState()
         }
     }
 

@@ -3,18 +3,12 @@
  */
 
 import React, {Component} from 'react';
-import {
-    View,
-    StyleSheet,
-    Modal,
-    ScrollView,
-    Platform,
-    TouchableHighlight,
-    Text
-} from 'react-native';
+import {Modal, DeviceEventEmitter, Platform, ScrollView, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import GlobalStyles from '../../../res/styles/GlobalStyles';
-import ThemeFactory, {ThemeFlags} from '../../../res/styles/ThemeFactory'
+import {ThemeFlags} from '../../../res/styles/ThemeFactory'
 import ThemeDao from '../../expand/dao/ThemeDao'
+import {ACTION_HOME} from "../HomePage";
+import ThemeFactory from "../../../res/styles/ThemeFactory";
 
 export default class CustomTheme extends Component {
 
@@ -25,7 +19,8 @@ export default class CustomTheme extends Component {
 
     onSelectTheme(themeKey) {
         this.props.onClose();
-        this.themeDao.save(ThemeFlags[themeKey])
+        this.themeDao.save(ThemeFlags[themeKey]);
+        DeviceEventEmitter.emit('ACTION_BASE', ACTION_HOME.A_THEME, ThemeFactory.createTheme(ThemeFlags[themeKey]))
     }
 
     /**

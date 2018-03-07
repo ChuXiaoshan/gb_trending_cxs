@@ -17,8 +17,9 @@ import ViewUtils from '../../util/ViewUtils';
 import LanguageDao, {FLAG_LANGUAGE} from '../../expand/dao/LanguageDao';
 import CheckBox from 'react-native-check-box';
 import ArrayUtils from '../../util/ArrayUtils'
+import BaseComponent from "../BaseComponent";
 
-export default class CustomKeyPage extends Component {
+export default class CustomKeyPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.isRemoveKey = !!this.props.isRemoveKey;

@@ -11,6 +11,7 @@ import GlobalStyles from "../../../res/styles/GlobalStyles";
 import AboutCommon, {FLAG_ABOUT} from './AboutCommon';
 import WebViewPage from '../WebViewPage';
 import config from '../../../res/data/config.json';
+import BaseComponent from "../BaseComponent";
 
 const FLAG = {
     REPOSITORY: '开源项目',
@@ -62,7 +63,7 @@ const FLAG = {
         },
     },
 };
-export default class AboutMePage extends Component {
+export default class AboutMePage extends BaseComponent {
 
     constructor(props) {
         super(props);

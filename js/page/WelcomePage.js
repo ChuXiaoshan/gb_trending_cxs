@@ -4,9 +4,11 @@
 import React, {Component} from 'react';
 import ThemeDao from '../expand/dao/ThemeDao';
 import HomePage from './HomePage';
+import BaseComponent from "./BaseComponent";
 
-export default class WelcomePage extends Component {
+export default class WelcomePage extends BaseComponent {
     componentDidMount() {
+        super.componentDidMount()
         new ThemeDao().getTheme().then((data) => {
             this.theme = data;
         });
@@ -21,6 +23,7 @@ export default class WelcomePage extends Component {
     }
 
     componentWillUnmount() {
+        super.componentWillUnmount()
         this.timer && clearTimeout(this.timer)
     }
 

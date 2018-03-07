@@ -3,8 +3,9 @@ import {View, WebView} from 'react-native';
 import NavigationBar from '../common/NavigationBar';
 import GlobalStyles from '../../res/styles/GlobalStyles';
 import ViewUtils from '../util/ViewUtils';
+import BaseComponent from "./BaseComponent";
 
-export default class WebViewPage extends Component {
+export default class WebViewPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {

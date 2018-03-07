@@ -3,15 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import {
-    Text,
-    View,
-    Image,
-    Alert,
-    StyleSheet,
-    TouchableOpacity,
-    TouchableHighlight,
-} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View,} from 'react-native';
 import NavigationBar from '../../common/NavigationBar';
 import LanguageDao, {FLAG_LANGUAGE} from '../../expand/dao/LanguageDao';
 import ArrayUtils from '../../util/ArrayUtils';
@@ -131,6 +123,14 @@ export default class SortKeyPage extends Component {
 }
 
 class SortCell extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            theme: this.props.theme
+        }
+    }
+
     render() {
         return (
             <TouchableHighlight
@@ -139,7 +139,7 @@ class SortCell extends Component {
                 {...this.props.sortHandlers}>
                 <View style={styles.row}>
                     <Image
-                        style={styles.image}
+                        style={[styles.image, {tintColor: this.props.theme.themeColor}]}
                         source={require('./img/ic_sort.png')}/>
                     <Text>{this.props.data.name}</Text>
                 </View>
@@ -163,13 +163,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     image: {
-        tintColor: '#2196F3',
         height: 16,
         width: 16,
         marginRight: 10
     },
-    title: {
-        fontSize: 20,
-        color: 'white'
-    },
+    title:
+        {
+            fontSize: 20,
+            color: 'white'
+        },
 });

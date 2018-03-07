@@ -21,8 +21,9 @@ import {FLAG_LANGUAGE} from '../../expand/dao/LanguageDao';
 import AboutPage from '../about/AboutPage';
 import AboutMePage from "../about/AboutMePage";
 import CustomThemePage from './CustomTheme';
+import BaseComponent from "../BaseComponent";
 
-export default class MyPage extends Component {
+export default class MyPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {

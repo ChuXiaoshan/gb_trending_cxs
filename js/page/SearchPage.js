@@ -26,12 +26,13 @@ import Utils from "../util/Utils";
 import MakeCancelable from '../util/Cancleable';
 import {ACTION_HOME} from "./HomePage";
 import makeCancelable from "../util/Cancleable";
+import BaseComponent from "./BaseComponent";
 
 const QUERY_STR = '&sort=stars';
 const URL = 'https://api.github.com/search/repositories?q=';
 
 
-export default class SearchPage extends Component {
+export default class SearchPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);

@@ -11,8 +11,9 @@ import AboutCommon, {FLAG_ABOUT} from './AboutCommon';
 import WebViewPage from '../WebViewPage';
 import config from '../../../res/data/config.json';
 import AboutMePage from "./AboutMePage";
+import BaseComponent from "../BaseComponent";
 
-export default class AboutPage extends Component {
+export default class AboutPage extends BaseComponent {
 
     constructor(props) {
         super(props);
