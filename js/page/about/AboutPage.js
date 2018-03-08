@@ -28,6 +28,10 @@ export default class AboutPage extends BaseComponent {
         this.aboutCommon.componentDidMount()
     }
 
+    componentWillUnmount() {
+        this.aboutCommon.componentWillUnmount()
+    }
+
     updateState(dic) {
         this.setState(dic)
     }

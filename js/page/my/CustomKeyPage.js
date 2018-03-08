@@ -18,20 +18,32 @@ import LanguageDao, {FLAG_LANGUAGE} from '../../expand/dao/LanguageDao';
 import CheckBox from 'react-native-check-box';
 import ArrayUtils from '../../util/ArrayUtils'
 import BaseComponent from "../BaseComponent";
+import BackPressComponent from "../../common/BackPressComponent";
 
 export default class CustomKeyPage extends BaseComponent {
     constructor(props) {
         super(props);
         this.isRemoveKey = !!this.props.isRemoveKey;
         this.changeValues = [];
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
         this.state = {
             dataArray: []
         };
     }
 
     componentDidMount() {
+        this.backPress.componentDidMount();
         this.languageDao = new LanguageDao(this.props.flag);
         this.loadData()
+    }
+
+    componentWillUnmount() {
+        this.backPress.componentWillUnmount();
+    }
+
+    onBackPress() {
+        this.onBack();
+        return true;
     }
 
     loadData() {

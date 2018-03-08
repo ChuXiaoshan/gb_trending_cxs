@@ -27,6 +27,7 @@ import MakeCancelable from '../util/Cancleable';
 import {ACTION_HOME} from "./HomePage";
 import makeCancelable from "../util/Cancleable";
 import BaseComponent from "./BaseComponent";
+import BackPressComponent from "../common/BackPressComponent";
 
 const QUERY_STR = '&sort=stars';
 const URL = 'https://api.github.com/search/repositories?q=';
@@ -40,6 +41,7 @@ export default class SearchPage extends BaseComponent {
         this.keys = [];
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
         this.isKeyChange = false;
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
         this.state = {
             isLoading: false,
             rightButtonText: '搜索',
@@ -110,10 +112,12 @@ export default class SearchPage extends BaseComponent {
     }
 
     componentDidMount() {
+        this.backPress.componentDidMount();
         this.initKeys()
     }
 
     componentWillUnmount() {
+        this.backPress.componentWillUnmount();
         if (this.isKeyChange) {
             DeviceEventEmitter.emit('ACTION_HOME', ACTION_HOME.A_RESTART)
         }
@@ -162,6 +166,7 @@ export default class SearchPage extends BaseComponent {
     onBackPress() {
         this.refs.input.blur();
         this.props.navigator.pop();
+        return true;
     }
 
     onRightButtonClick() {

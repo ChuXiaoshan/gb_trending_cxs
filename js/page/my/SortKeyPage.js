@@ -9,12 +9,14 @@ import LanguageDao, {FLAG_LANGUAGE} from '../../expand/dao/LanguageDao';
 import ArrayUtils from '../../util/ArrayUtils';
 import SortableListView from 'react-native-sortable-listview';
 import ViewUtils from '../../util/ViewUtils';
+import BackPressComponent from "../../common/BackPressComponent";
 
 export default class SortKeyPage extends Component {
     constructor(props) {
         super(props);
         this.dataArray = [];
         this.sortResultArray = [];
+        this.backPress = new BackPressComponent({backPress: (e) => this.onBackPress(e)});
         this.originalCheckedArray = [];
         this.state = {
             checkedArray: [],
@@ -23,8 +25,18 @@ export default class SortKeyPage extends Component {
     }
 
     componentDidMount() {
+        this.backPress.componentDidMount();
         this.languageDao = new LanguageDao(this.props.flag);
         this.loadData();
+    }
+
+    componentWillUnmount() {
+        this.backPress.componentWillUnmount();
+    }
+
+    onBackPress(e) {
+        this.onBack();
+        return true;
     }
 
     loadData() {

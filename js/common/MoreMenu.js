@@ -3,24 +3,9 @@
  * 更多菜单
  */
 
-import React, {Component} from 'react';
-import {Menu, MenuOption, MenuOptions, MenuProvider, MenuTrigger, renderers} from 'react-native-popup-menu';
-import {DeviceEventEmitter, Image, ListView, RefreshControl, StyleSheet, Text, View} from 'react-native';
-import ScrollableTabView, {ScrollableTabBar} from 'react-native-scrollable-tab-view';
-import DataRepository, {FLAG_STORAGE} from '../expand/dao/DataRepository';
-import LanguageDao, {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
-import NavigationBar from "../common/NavigationBar";
-import FavoriteDao from '../expand/dao/FavoriteDao';
-import TrendingCell from '../common/TrendingCell';
-import ProjectsModel from '../model/ProjectModel';
-import TimeSpan from '../model/TimeSpan';
-import Utils from "../util/Utils";
-import ActionUtils from "../util/ActionUtils";
-import ViewUtil from "../util/ViewUtils";
-import CustomKeyPage from "../page/my/CustomKeyPage";
-import AboutMePage from "../page/about/AboutMePage";
-import SortKeyPage from "../page/my/SortKeyPage";
-import AboutPage from "../page/about/AboutPage";
+import React from 'react';
+import {Menu, MenuOption, MenuOptions, MenuTrigger, renderers} from 'react-native-popup-menu';
+import {Image, StyleSheet, View} from 'react-native';
 
 const {ContextMenu} = renderers;
 
